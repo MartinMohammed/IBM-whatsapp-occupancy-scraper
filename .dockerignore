@@ -6,7 +6,10 @@ app/data
 app/logs
 
 # Database 
-./postgres
+postgres
+
+# Grafana
+grafana_data
 
 # Git
 .git
