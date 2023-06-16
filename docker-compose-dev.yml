@@ -37,6 +37,23 @@ services:
     ports:
       - 5432:5432
 
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=martin.developer2000@gmail.com
+      - PGADMIN_DEFAULT_PASSWORD=admin123
+    ports:
+      - 80:80
+
+  portainer:
+    image: portainer/portainer-ce:latest
+    ports:
+      - 9443:9443
+    volumes:
+      - data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
+
   grafana:
     image: grafana/grafana:10.0.0
     container_name: grafana
@@ -48,7 +65,11 @@ services:
       - grafana_data:/var/lib/grafana
 
 
+
 # Named volume for general data storage
 volumes:
+  # Named volume managed by Docker
+  data:
+
   # Anonymous volume for Grafana
   grafana_data: {}
