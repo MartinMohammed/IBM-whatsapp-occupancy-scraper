@@ -3,6 +3,7 @@
 ## Overview
 This project serves as a worker application for making GET requests to the FitnessFabrik API and collecting data from specific gym locations. The main objective is to monitor the number of visitors in each studio and store the data for further analysis. The application can be cloned and dedicated to monitoring a specific studio.
 
+
 ## Settings
 The application utilizes several settings that can be configured to customize its behavior. These settings are stored in environment variables and should be properly set before running the application. Here are the available settings:
 
