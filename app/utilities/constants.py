@@ -1,5 +1,8 @@
+"""Constant values that dont change."""
+
 import os
 
+# /app inside docker container.
 PATH_TO_ROOT = os.getcwd()
 
 

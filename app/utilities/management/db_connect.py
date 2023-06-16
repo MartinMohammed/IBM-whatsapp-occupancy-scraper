@@ -4,7 +4,7 @@ import os
 import sys
 import time
 import psycopg2
-from .. import utils
+from .. import utils_log
 from .. import constants
 
 # ----------------------- DATABASE CONNECTION -----------------------
@@ -32,7 +32,7 @@ try:
 
 except AssertionError as e: 
     error_file_path = os.path.join(constants.PATH_TO_ROOT, "logs", "logs.error")
-    utils.log(f"Location Short Title: {constants.LOCATION_SHORT_TITLE} --> {e}", error_file_path)
+    utils_log.log(f"Location Short Title: {constants.LOCATION_SHORT_TITLE} --> {e}", error_file_path)
     sys.exit(1)
 
 
@@ -49,14 +49,14 @@ def connect_to_db():
                 port = DB_PORT
             )
             if db_connection.closed == 0: 
-                utils.log("Successful establlished connection to db.", file_path=os.path.join(constants.LOG_DIRECTORY, "db.log"))
+                utils_log.log("Successful establlished connection to db.", file_path=os.path.join(constants.LOG_DIRECTORY, "db.log"))
                 return db_connection  # singleton? 
             else: 
-                utils.log(f"Connection failed, sleep {pow(2, i)} seconds.", file_path=os.path.join(constants.LOG_DIRECTORY, "db.log"))
+                utils_log.log(f"Connection failed, sleep {pow(2, i)} seconds.", file_path=os.path.join(constants.LOG_DIRECTORY, "db.log"))
                 # sleep and retry later again.
                 time.sleep(pow(2, i))
         # failed
         except psycopg2.Error as e:
-            utils.log(f"Error connecting to the database (sleep {pow(2, i)} seconds.): {str(e)}", file_path=os.path.join(constants.LOG_DIRECTORY, "db.log"))
+            utils_log.log(f"Error connecting to the database (sleep {pow(2, i)} seconds.): {str(e)}", file_path=os.path.join(constants.LOG_DIRECTORY, "db.log"))
             # sleep and retry later again.
             time.sleep(pow(2, i))

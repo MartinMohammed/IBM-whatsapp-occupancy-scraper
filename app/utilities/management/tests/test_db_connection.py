@@ -3,7 +3,7 @@ from unittest.mock import patch, MagicMock
 import os
 import psycopg2
 from ..db_connect import connect_to_db
-@patch("utilities.utils.log")
+@patch("utilities.utils_log.log")
 @patch("builtins.print")
 @patch("psycopg2.connect")
 class DBTest(TestCase):

@@ -12,7 +12,14 @@ import os
 import time
 from datetime import datetime, timedelta
 
-from utilities import (utils, constants)
+from utilities import (
+    constants,
+    utils,
+    utils_csv,
+    utils_db, 
+    utils_log
+    )
+
 from utilities.management.db_connect import connect_to_db
 
 
@@ -37,7 +44,7 @@ try:
     LOCATION_ID = int(LOCATION_ID)
 except AssertionError as e:
     error_file_path = os.path.join(constants.LOG_DIRECTORY, "logs.error")
-    utils.log(f"Location Short Title: {LOCATION_SHORT_TITLE} --> {e}", error_file_path)
+    utils_log.log(f"Location Short Title: {LOCATION_SHORT_TITLE} --> {e}", error_file_path)
     sys.exit(1)
 
 # ----------------------- SETTINGS -----------------------
@@ -65,7 +72,7 @@ def main():
 
     # Initialize starting table if not exists 
     db_schema = "(timestamp TIMESTAMP, visitor_count INT)"
-    utils.create_table_if_not_exists(connection, table_name=DB_TABLE_NAME, fields=db_schema)
+    utils_db.create_table_if_not_exists(connection, table_name=DB_TABLE_NAME, fields=db_schema)
 
 
     while True:
@@ -95,11 +102,11 @@ def main():
             current_load = studio_location_data.get("current_load")
 
             # =--------------------- SAVE THE DATA ---------------------=
-            utils.write_to_csv(file_path, HEADER, timestamp, current_load)
-            utils.save_to_db(connection, table_name=DB_TABLE_NAME, values=(now.strftime('%Y-%m-%d %H:%M'), current_load))
+            utils_csv.write_to_csv(file_path, HEADER, timestamp, current_load)
+            utils_db.save_to_db(connection, table_name=DB_TABLE_NAME, values=(now.strftime('%Y-%m-%d %H:%M'), current_load))
             # =--------------------- SAVE THE DATA ---------------------=
 
-            utils.log(message=f"Current load in {LOCATION_SHORT_TITLE}: {current_load}.")
+            utils_log.log(message=f"Current load in {LOCATION_SHORT_TITLE}: {current_load}.")
 
             # Sleep before making the next request
             time.sleep(REQUEST_DENSITY)
@@ -112,11 +119,11 @@ def main():
             # integer division 
             sleep_hours = sleep_seconds // 60 // 60
 
-            utils.log(f"Now sleep: {sleep_hours} hours.")
+            utils_log.log(f"Now sleep: {sleep_hours} hours.")
             time.sleep(sleep_seconds)   
 
             # ---------------- FINISH SLEEPING ----------------
-            utils.log(f"Sleeped: {sleep_hours} hours.")
+            utils_log.log(f"Sleeped: {sleep_hours} hours.")
 
             # After sleeping create a new file
             time_after_sleeping = now + timedelta(hours=sleep_hours)

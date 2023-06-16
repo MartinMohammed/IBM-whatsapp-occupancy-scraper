@@ -3,6 +3,7 @@ import requests
 from datetime import datetime
 import csv
 from . import constants
+from . import utils_log
 
 def fetch_data(url: str) -> dict:
     """
@@ -21,57 +22,9 @@ def fetch_data(url: str) -> dict:
         response = requests.get(url=url, headers={'Accept': 'application/json'})
         response.raise_for_status()
     except requests.HTTPError as e:
-        log(file_path=os.path.join(os.getcwd(), "logs", "requests.log"), message=str(e))
+        utils_log.log(file_path=os.path.join(os.getcwd(), "logs", "requests.log"), message=str(e))
     return response.json()
-
-
-def write_to_csv(file_path: str, header: list, *args):
-    """
-    Write data to a CSV file.
-
-    Args:
-        file_path (str): The path to the CSV file.
-        header (list): The header row for the CSV file.
-        *args: Variable number of arguments representing the data rows.
-
-    Note:
-        The CSV file is opened in append mode.
-
-    """
-    with open(file_path, mode="a", newline='') as csv_file:
-        csv_writer = csv.writer(csv_file, delimiter=',')
-        if os.path.getsize(filename=file_path) == 0:
-            csv_writer.writerow(header)
-        csv_writer.writerow(args)
-
-
-def log(message: str, file_path: str = None):
-    """
-    Write a log message to a file or print it to the console.
-
-    Args:
-        file_path (str): The path to the log file. If None, the message will be printed to the console.
-        message (str): The log message to write.
-
-    Note:
-        If file_path is provided, the log file is opened in append mode and the log message is printed to the console.
-        If file_path is None, the log message is printed to the console.
-    """
-
-    timestamp = datetime.now().strftime('%d-%m-%Y-%H-%M')
-    log_message = f"Timestamp {timestamp}: {message}"
-
-    if file_path is not None:
-        with open(file_path, mode="a", encoding="utf-8") as file:
-            file.write(log_message)
-            file.write("\n")
-
-       
-    print(log_message)
-    print("_" * 50)
         
-
-
 def check_is_week_day(current_day: int) -> bool:
     """
     Checks if today is a weekday (Monday including Friday) or not.
@@ -83,7 +36,7 @@ def check_is_week_day(current_day: int) -> bool:
         bool: True if it is a weekday, False otherwise.
     """
     if (not (0 <= current_day <= 6)):
-        log("Warning: Provided weekday is not valid.")
+        utils_log.log("Warning: Provided weekday is not valid.")
         current_day = datetime().now().weekday()
 
     return 0 <= current_day <= 4
@@ -151,51 +104,3 @@ def calculate_sleep_time_in_seconds(date: datetime, opening_hour: int, tomorrow 
     sleep_time_in_seconds = (total_minutes_to_sleep * 60) + seconds_to_sleep
     
     return sleep_time_in_seconds
-
-
-# ---------------------- FOR WORKING WITH DB ----------------------
-def create_table_if_not_exists(connection, table_name, fields):
-    """
-    Create a table with the specified table name and fields.
-
-    Args:
-        connection (psycopg2.extensions.connection): The database connection.
-        table_name (str): The name of the table to create.
-        fields (str): The fields and their data types for the table.
-
-    Example:
-        create_table(connection, 'employee', '''
-            (
-                EmployeeID int, 
-                name varchar(40) NOT NULL, 
-                salary int, 
-                dept_id varchar(30)
-            )
-        ''')
-    """
-    with connection.cursor() as cursor:
-        query = f'''CREATE TABLE IF NOT EXISTS {table_name}{fields}'''
-        cursor.execute(query)
-        connection.commit()
-
-def save_to_db(connection, table_name, values):
-    """
-    Save entries to the specified table with the given values.
-
-    Args:
-        connection (psycopg2.extensions.connection): The database connection.
-        table_name (str): The name of the table to insert the values into.
-        values (tuple): The values to be inserted into the table.
-
-    Example:
-        save_to_db(connection, 'employee', (1, "John", 50000, 'D1'))
-    """
-    # Use a context manager to automatically close the cursor after execution
-    with connection.cursor() as cursor:
-        # Note: 
-        # hen you pass an integer value as a parameter using %s in a formatted string and then save it to the database,
-        #  the integer value will be properly stored in the corresponding integer column in the database.
-        query = f"INSERT INTO {table_name} (timestamp, visitor_count) VALUES(%s, %s)"
-        cursor.execute(query, values)
-        connection.commit()
-
