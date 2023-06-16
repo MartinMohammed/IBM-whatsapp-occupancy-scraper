@@ -1,0 +1,43 @@
+version: "3"
+services: 
+  visitor-tracker: 
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    volumes: 
+      - ./app/data:/app/data  # Mount local folder to container for data storage
+      - ./app/logs:/app/logs  # Mount local folder to container for log storage
+    environment: 
+      # Gym-Tracker setup 
+      - LOCATION_ID=3
+      - LOCATION_SHORT_TITLE=FFGR
+      - API_URL=https://bodycultureapp.de/ajax/studiocapacity?apiToken=5  # Set environment variable for API URL
+      # Database setup 
+      - DB_HOSTNAME=db
+      - DB_NAME=fitness-fabrik-griesheim
+      - DB_USERNAME=admin
+      - DB_PASSWORD=admin123
+      - DB_PORT=5432
+  
+    depends_on:
+      - db
+    restart: always
+    command: > 
+      sh -c "python3 ./test_runner.py && python3 ./main.py"  # Run the command to execute the Python script
+
+  db: 
+    image: postgres:15.3-alpine3.17
+    restart: always
+    environment:
+      - POSTGRES_DB=fitness-fabrik-griesheim
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin123
+    ports:
+      - 5432:5432
+  pgadmin: 
+      image: dpage/pgadmin4:latest
+      environment: 
+        - PGADMIN_DEFAULT_EMAIL=martin.developer2000@gmail.com
+        - PGADMIN_DEFAULT_PASSWORD=admin123
+      ports: 
+        - 80:80
