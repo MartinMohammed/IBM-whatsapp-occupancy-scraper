@@ -6,7 +6,7 @@ app/logs
 postgres
 
 # Grafana
-app/grafana_data
+grafana_data
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
