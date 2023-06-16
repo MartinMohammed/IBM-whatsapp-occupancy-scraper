@@ -46,10 +46,16 @@ services:
         - PGADMIN_DEFAULT_PASSWORD=admin123
       ports: 
         - 80:80
+  grafana:
+    image: grafana/grafana:10.0.0
+    container_name: grafana
+    restart: unless-stopped
+    ports:
+      - '3000:3000'
+    volumes:
+      - grafana_data:/var/lib/grafana
 
-  grafana: 
-    image: grafana/grafana-oss:10.0.0
-    volumes: 
-      - ./grafana_data:/var/lib/grafana
-    ports: 
-      - 3000:3000
+# In this case, it is an empty volume, as indicated by the empty curly braces {}.
+# By defining it as an empty volume, Docker will handle the creation and management of the volume, including assigning the appropriate permissions.
+volumes:
+  grafana_data: {}
