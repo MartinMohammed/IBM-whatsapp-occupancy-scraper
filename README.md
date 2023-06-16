@@ -1,22 +1,21 @@
 # Project Documentation
 
 ## Overview
-This project serves as a worker application for making GET requests to the FitnessFabrik API and collecting data from specific gym locations. The main objective is to monitor the number of visitors in each studio and store the data for further analysis. The application can be cloned and dedicated to monitoring a specific studio.
-
+This project serves as a worker application for monitoring gym visitor data by making GET requests to the FitnessFabrik API. It collects data from specific gym locations and stores it for further analysis. You can clone the application and customize it to monitor a specific studio.
 
 ## Settings
-The application utilizes several settings that can be configured to customize its behavior. These settings are stored in environment variables and should be properly set before running the application. Here are the available settings:
+The application offers configurable settings stored in environment variables. Before running the application, ensure these variables are properly set. Here are the available settings:
 
-* `REQUEST_DENSITY`: Specifies the frequency of API requests in seconds. The default value is 300 seconds (5 minutes).
-* `ENTRIES_UNTIL_FILE_SEGMENTATION`: Defines the number of entries in the CSV file until a new file is created. The default value is 1000 entries.
-* `LOCATION_ID`: The ID of the gym location. This value must be provided.
-* `LOCATION_SHORT_TITLE`: Indicates the location to be tracked based on the gym-mapping.json file. This value must be provided.
-* `API_URL`: The URL of the FitnessFabrik API. This value must be provided.
+- `REQUEST_DENSITY`: Specifies the frequency of API requests in seconds. Default: 300 seconds (5 minutes).
+- `ENTRIES_UNTIL_FILE_SEGMENTATION`: Defines the number of entries in the CSV file until a new file is created. Default: 1000 entries.
+- `LOCATION_ID`: The ID of the gym location (required).
+- `LOCATION_SHORT_TITLE`: Indicates the location to be tracked based on the gym-mapping.json file (required).
+- `API_URL`: The URL of the FitnessFabrik API (required).
 
-Please make sure to set these environment variables before running the application.
+Make sure to set these environment variables before running the application.
 
 ## File Structure
-The project has the following file structure:
+The project follows the following file structure:
 
 ```
 - app/
@@ -39,24 +38,21 @@ The project has the following file structure:
 ## Error Files
 
 ### error.log
-The `error.log` file is used for logging errors that occur during the startup of the application or missing user configurations. The following situations are logged to this file:
-
-* Missing configuration of the user for starting the worker (e.g., not setting the required environment variables).
-* General errors that occurred during the startup of the application.
+The `error.log` file logs errors that occur during application startup or missing user configurations. It captures situations such as missing required environment variables or general startup errors.
 
 ### requests.log
-The `requests.log` file is used for logging errors that occur during HTTP requests, such as fetching data from the API or writing data. Any errors related to HTTP requests are logged to this file.
+The `requests.log` file logs errors related to HTTP requests, such as fetching data from the API or writing data. Any errors associated with HTTP requests are recorded here.
 
 ### db.log
-The `db.log` file is utilized to record database events that occur during database requests, including querying data from the database or creating new data. This file serves as a log for any errors or events associated with the database operations.
+The `db.log` file records events related to database operations, including querying data from the database or creating new data. It serves as a log for any errors or events related to the database.
 
-Please refer to these error log files for troubleshooting and resolving issues related to the application.
+Please refer to these error log files for troubleshooting and resolving issues.
 
 ## Usage
 To run the application, follow these steps:
 
-1. Set the required environment variables by creating a `.env` file in the project's root directory and defining the values for `REQUEST_DENSITY`, `ENTRIES_UNTIL_FILE_SEGMENTATION`, `LOCATION_ID`, `LOCATION_SHORT_TITLE`, and `API_URL`.
-2. Build and run the application using Docker Compose. Ensure that Docker Compose is installed on your system. Run the following command in the project's root directory:
+1. Set the required environment variables by creating a `.env` file in the project's root directory. Define the values for `REQUEST_DENSITY`, `ENTRIES_UNTIL_FILE_SEGMENTATION`, `LOCATION_ID`, `LOCATION_SHORT_TITLE`, and `API_URL`.
+2. Build and run the application using Docker Compose. Make sure you have Docker Compose installed. Run the following command in the project's root directory:
 
 ```
 docker-compose up --build
@@ -64,5 +60,27 @@ docker-compose up --build
 
 3. The application will start making GET requests to the FitnessFabrik API, collecting data, and storing it in the `data/` directory.
 
+4. Access the PostgreSQL database using a database client or the provided pgAdmin container:
+
+- **Database Connection Details**:
+  - Host: localhost
+  - Port: 5432
+  - Database: fitness-fabrik-griesheim
+  - Username: admin
+  - Password: admin123
+
+- **pgAdmin**:
+  - Access pgAdmin in your browser at `http://localhost`.
+
 ## Conclusion
-This documentation provides an overview of the project, its settings, file structure, and information about the error log files. Follow the provided instructions to set up and run the application successfully. If you encounter any issues, refer to the error log files for troubleshooting.
+This documentation provides an overview of the project, its settings, file structure, and information about the error
+
+ log files. Follow the provided instructions to set up and run the application successfully. If you encounter any issues, refer to the error log files for troubleshooting.
+
+## Contributing
+
+Contributions to the Visitor Tracker project are welcome! If you find any issues or want to suggest improvements, please open an issue or submit a pull request.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
