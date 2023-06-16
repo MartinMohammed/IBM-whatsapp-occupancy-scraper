@@ -1,7 +1,12 @@
 # Setup
 start.sh
+
+# Application 
 app/data
 app/logs
+
+# Database 
+./postgres
 
 # Git
 .git

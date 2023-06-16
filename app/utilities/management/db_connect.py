@@ -57,6 +57,6 @@ def connect_to_db():
                 time.sleep(pow(2, i))
         # failed
         except psycopg2.Error as e:
-            utils.log(f"Error connecting to the database: {str(e)}", file_path=os.path.join(constants.LOG_DIRECTORY, "db.log"))
+            utils.log(f"Error connecting to the database (sleep {pow(2, i)} seconds.): {str(e)}", file_path=os.path.join(constants.LOG_DIRECTORY, "db.log"))
             # sleep and retry later again.
-            time.sleep(2**i)
+            time.sleep(pow(2, i))
