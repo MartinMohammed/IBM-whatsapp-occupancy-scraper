@@ -21,7 +21,7 @@ services:
   
     depends_on:
       - db
-    restart: always
+    restart: on-failure
     command: > 
       sh -c "python3 ./test_runner.py && python3 ./main.py"  # Run the command to execute the Python script
 
@@ -29,9 +29,12 @@ services:
     image: postgres:15.3-alpine3.17
     restart: always
     environment:
+      - PGDATA=/var/lib/postgresql/data/pgdata
       - POSTGRES_DB=fitness-fabrik-griesheim
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=admin123
+    volumes: 
+      - ./postgres/pgdata:/var/lib/postgresql/data
     ports:
       - 5432:5432
   pgadmin: 

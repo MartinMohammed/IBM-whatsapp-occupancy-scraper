@@ -42,11 +42,13 @@ except AssertionError as e:
 
 # ----------------------- SETTINGS -----------------------
 HEADER = ["timestamp", "visitor_count"]
+DB_TABLE_NAME = f"visitors"
 
 
 # --------------- DB CONNECTION ---------------
 # wait for the connection to be established
-connection = connect_to_db()
+connection = None
+cursor = None
 # --------------- DB CONNECTION ---------------
  
 def main():
@@ -57,6 +59,14 @@ def main():
     file_name = utils.construct_file_name(datetime.now(), LOCATION_SHORT_TITLE) 
     is_week_day = utils.check_is_week_day(datetime.now().weekday())
     day = "week_day" if is_week_day else "week_end"
+
+    global connection
+    connection = connect_to_db()
+
+    # Initialize starting table if not exists 
+    db_schema = "(timestamp TIMESTAMP, visitor_count INT)"
+    utils.create_table_if_not_exists(connection, table_name=DB_TABLE_NAME, fields=db_schema)
+
 
     while True:
         now = datetime.now()
@@ -80,10 +90,15 @@ def main():
                 entries_count = 0  # Reset entries count
 
             file_path = os.path.join(constants.DATA_DIRECTORY, file_name)
-            timestamp = int(datetime.timestamp(datetime.now()))
+            timestamp = int(datetime.timestamp(now))
             
             current_load = studio_location_data.get("current_load")
+
+            # =--------------------- SAVE THE DATA ---------------------=
             utils.write_to_csv(file_path, HEADER, timestamp, current_load)
+            utils.save_to_db(connection, table_name=DB_TABLE_NAME, values=(now.strftime('%Y-%m-%d %H:%M'), current_load))
+            # =--------------------- SAVE THE DATA ---------------------=
+
             utils.log(message=f"Current load in {LOCATION_SHORT_TITLE}: {current_load}.")
 
             # Sleep before making the next request
@@ -92,7 +107,7 @@ def main():
         else:
             """The studio is closed, sleep until the next day."""   
             opening_time = constants.OPENING_HOURS[day].get("open")
-            sleep_seconds = utils.calculate_sleep_time_in_seconds(now, opening_time, tomorrow= now.hour >= opening_time)
+            sleep_seconds = utils.calculate_sleep_time_in_seconds(now, opening_time, tomorrow=now.hour >= opening_time)
 
             # integer division 
             sleep_hours = sleep_seconds // 60 // 60
@@ -109,5 +124,18 @@ def main():
             file_name = utils.construct_file_name(time_after_sleeping, LOCATION_SHORT_TITLE)
             is_week_day = utils.check_is_week_day(now.weekday())
 
+            
 if __name__ == "__main__":
-    main()
+    try: 
+        main()
+    except Exception as e: 
+        # Handle the exception, e.g., print an error message
+        print("An exception occurred:", str(e))
+    finally: 
+       # Close the database connection in the finally block
+        if cursor:
+            cursor.close()
+        if connection: 
+            connection.close()
+
+
