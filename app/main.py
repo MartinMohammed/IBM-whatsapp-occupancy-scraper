@@ -42,7 +42,7 @@ except AssertionError as e:
 
 # ----------------------- SETTINGS -----------------------
 HEADER = ["timestamp", "visitor_count"]
-DB_TABLE_NAME = f"visitors"
+DB_TABLE_NAME = f"visitors_{LOCATION_SHORT_TITLE}"
 
 
 # --------------- DB CONNECTION ---------------
