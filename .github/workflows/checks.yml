@@ -36,5 +36,5 @@
 
         - name: Test
           # Running the unit tests in our project using a Docker Compose command
-          run: docker-compose -f docker-compose.yml run --rm visitor-tracker sh -c "python3 test_runner.py"
+          run: docker compose -f docker-compose.yml run --rm visitor-tracker sh -c "python3 test_runner.py"
   

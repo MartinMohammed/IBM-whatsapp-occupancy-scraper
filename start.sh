@@ -15,11 +15,11 @@ else
 fi
 
 # Check if the 'docker-compose' command exists.
-if command -v docker-compose >/dev/null 2>&1; then
+if command -v docker compose >/dev/null 2>&1; then
   if [ "$param1" == "--dev" ]; then  # Check if the additional parameter is "--dev".
-    docker-compose -f ./docker-compose.dev.yml up --build  # Start the services defined in the development Docker Compose file.
+    docker compose -f ./docker-compose.dev.yml up --build  # Start the services defined in the development Docker Compose file.
   else
-    docker-compose -f ./docker-compose.yml up --build  # Start the services defined in the Docker Compose file.
+    docker compose -f ./docker-compose.yml up --build  # Start the services defined in the Docker Compose file.
   fi
 else
   echo "The command 'docker-compose' does not exist."
