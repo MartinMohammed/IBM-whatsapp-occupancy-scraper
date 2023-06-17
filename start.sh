@@ -8,7 +8,7 @@ chmod o+w $PWD/grafana_data
 
 # Check if the script is executed with the "--dev --clean" options
 if [[ "$1" == "--dev" && "$2" == "--clean" ]]; then
-  docker-compose -f docker-compose.dev.yml down -v
+  docker compose -f docker-compose.dev.yml down -v
   rm -rf $PWD/app/data $PWD/app/logs $PWD/postgres
 fi
 
