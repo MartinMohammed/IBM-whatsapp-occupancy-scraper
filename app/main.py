@@ -83,8 +83,6 @@ def main():
         # starts when the gym opens 
         if is_in_opening_hours:
             # Get the JSON response data only for the specific location
-            
-
             studios_location_data = utils.fetch_data(URL)
             studio_location_data = [studio for studio in studios_location_data if studio["studio_id"] == LOCATION_ID][0]
             assert studio_location_data is not None, f"Studio data for location {LOCATION_ID} \ {LOCATION_SHORT_TITLE} was not found."
@@ -129,7 +127,7 @@ def main():
             time_after_sleeping = now + timedelta(hours=sleep_hours)
 
             file_name = utils.construct_file_name(time_after_sleeping, LOCATION_SHORT_TITLE)
-            is_week_day = utils.check_is_week_day(now.weekday())
+            is_week_day = utils.check_is_week_day(time_after_sleeping.weekday())
 
             
 if __name__ == "__main__":
