@@ -4,7 +4,7 @@
 param1="$1"  # The first additional parameter.
 
 mkdir -p $PWD/app/data $PWD/app/logs $PWD/portainer_data $PWD/grafana_data
-chmod o+w $PWD/grafana_data
+chmod o+w $PWD/grafana_data $PWD/portainer_data
 
 # Check if the script is executed with the "--dev --clean" options
 if [[ "$1" == "--dev" && "$2" == "--clean" ]]; then
