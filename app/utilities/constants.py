@@ -17,8 +17,22 @@ if not os.path.exists(LOG_DIRECTORY):
     os.makedirs(DATA_DIRECTORY)
 
 OPENING_HOURS = {
-    # MON including FRI
-    "week_day": {"open": 8, "close": 23},
-    # SAT including SUN
-    "week_end": {"open": 8, "close": 21}
-}
+        "FFGR": {
+            # MON including FRI
+            "week_day": {"open": 8, "close": 23},
+            # SAT including SUN
+            "week_end": {"open": 8, "close": 21}
+        }, 
+        "FFDA": {
+            # MON including FRI
+            "week_day": {"open": 8, "close": 23},
+            # SAT including SUN
+            "week_end": {"open": 10, "close": 21}
+        }, 
+        "FFHB": {
+             # MON including FRI
+            "week_day": {"open": 0, "close": 24},
+            # SAT including SUN
+            "week_end": {"open": 0, "close": 24}
+        }
+}.get(os.getenv("LOCATION_SHORT_TITLE"))
