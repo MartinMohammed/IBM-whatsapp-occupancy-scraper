@@ -63,8 +63,3 @@ services:
     volumes:
       # Named volume for Grafana data storage
       - ./grafana_data:/var/lib/grafana
-
-
-volumes:
-  # Anonymous volume for Grafana
-  grafana_data: {}
