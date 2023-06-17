@@ -20,13 +20,13 @@ services:
       - DB_PORT=5432
     depends_on:
       - db
-    restart: on-failure
+    restart: unless-stopped
     command: >
       sh -c "python3 ./test_runner.py && python3 ./main.py"  # Run the command to execute the Python script
 
   db:
     image: postgres:15.3-alpine3.17
-    restart: always
+    restart: unless-stopped
     environment:
       - PGDATA=/var/lib/postgresql/data/pgdata
       - POSTGRES_DB=fitness-fabrik-griesheim
@@ -44,6 +44,7 @@ services:
 
   pgadmin:
     image: dpage/pgadmin4:latest
+    restart: unless-stopped
     environment:
       - PGADMIN_DEFAULT_EMAIL=martin.developer2000@gmail.com
       - PGADMIN_DEFAULT_PASSWORD=admin123
