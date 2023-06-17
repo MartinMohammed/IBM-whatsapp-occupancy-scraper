@@ -19,7 +19,6 @@ if command -v docker-compose >/dev/null 2>&1; then
   elif [ "$1" == "--test" ]; then
     # 1. do some cleanup
     rm -rf "$PWD/app/data" "$PWD/app/logs" "$PWD/postgres"
-
     # rebuild the visitor tracker 
     docker compose build visitor-tracker
 
