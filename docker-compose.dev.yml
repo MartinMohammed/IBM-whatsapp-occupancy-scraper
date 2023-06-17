@@ -32,6 +32,8 @@ services:
       - POSTGRES_DB=fitness-fabrik-griesheim
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=admin123
+      - TZ='UTC+1'
+      - PGTZ='UTC+1'
     volumes:
       - ./postgres/pgdata:/var/lib/postgresql/data
     ports:
