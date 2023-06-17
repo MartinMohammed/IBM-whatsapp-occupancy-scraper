@@ -74,12 +74,14 @@ def construct_file_name(date: datetime, location_short_title: str) -> str:
     # Generate a new filename with the timestamp
     return f"visitors-{location_short_title}-{timestamp}.csv"
 
-def calculate_sleep_time_in_seconds(date: datetime, opening_hour: int, tomorrow = True):
+def calculate_sleep_time_in_seconds(date: datetime, opening_hour: int):
     # Calculate the number of hours to sleep until the next day's opening time
     # Example: If the current time is 23:34 and the opening time for tomorrow is exactly at 8 AM,
     # the calculation would be: 24 - (23 + 1) = 0 hours until tomorrow (excluding the next day's opening hour)
     # Additionally, 60 - 34 = 26 minutes until tomorrow (excluding the next day's opening hour)
     # Therefore, the total hours to sleep until tomorrow would be (8 + 0) hours and 26 minutes, which is 506 minutes.
+
+    tomorrow = date.hour >= opening_hour
 
     hours_to_sleep = opening_hour + (24 - (date.hour + 1)) 
     if not tomorrow:

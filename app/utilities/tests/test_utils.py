@@ -105,7 +105,7 @@ class TestUtilities(unittest.TestCase):
         self.assertEqual(amount_of_seconds, 30325)
 
         current_time = datetime(year=2023, month=6, day=15, hour=0, minute=40, second=55)
-        amount_of_seconds = utils.calculate_sleep_time_in_seconds(current_time, 11, tomorrow=False)
+        amount_of_seconds = utils.calculate_sleep_time_in_seconds(current_time, 11)
 
         self.assertEqual(amount_of_seconds, 37145)
 

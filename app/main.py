@@ -112,7 +112,7 @@ def main():
         else:
             """The studio is closed, sleep until the next day."""   
             opening_time = constants.OPENING_HOURS[day].get("open")
-            sleep_seconds = utils.calculate_sleep_time_in_seconds(now, opening_time, tomorrow=now.hour >= opening_time)
+            sleep_seconds = utils.calculate_sleep_time_in_seconds(now, opening_time)
 
             # integer division 
             sleep_hours = sleep_seconds // 60 // 60
