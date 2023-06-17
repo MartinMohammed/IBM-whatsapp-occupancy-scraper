@@ -1,7 +1,6 @@
 import os
 import requests
 from datetime import datetime
-import csv
 from . import constants
 from . import utils_log
 
@@ -24,7 +23,7 @@ def fetch_data(url: str) -> dict:
     except requests.HTTPError as e:
         utils_log.log(file_path=os.path.join(os.getcwd(), "logs", "requests.log"), message=str(e))
     return response.json()
-        
+
 def check_is_week_day(current_day: int) -> bool:
     """
     Checks if today is a weekday (Monday including Friday) or not.
@@ -35,9 +34,9 @@ def check_is_week_day(current_day: int) -> bool:
     Returns:
         bool: True if it is a weekday, False otherwise.
     """
-    if (not (0 <= current_day <= 6)):
+    if not (0 <= current_day <= 6):
         utils_log.log("Warning: Provided weekday is not valid.")
-        current_day = datetime().now().weekday()
+        current_day = datetime.now().weekday()
 
     return 0 <= current_day <= 4
 
@@ -56,15 +55,34 @@ def check_if_in_opening_hours(current_time: int, is_week_day: bool) -> bool:
     studio_open = opening_hours.get("open")
     studio_close = opening_hours.get("close")
 
-    return (studio_open <= current_time < studio_close)
+    return studio_open <= current_time < studio_close
 
-def construct_file_name(date: datetime, location_short_title: str) -> str:
+def get_today_visitors_file_name_if_it_does_exist(month: int, day: int):
+    """Checks if the visitors file for the provided month and day exists in the current directory."""
+    # e.g. fixed pattern: 
+    # day: index 14 start
+    # visitors-FFGR-17-06-2023-20-00.csv
+
+    file_names = os.listdir(constants.DATA_DIRECTORY)
+    for file_name in file_names:
+        # (16 not included)
+        file_name_day = file_name.split("-")[2]
+        file_name_month = file_name.split("-")[3]
+
+        if (day < 10): day = f"0{day}"
+        if (month < 10): month = f"0{month}"
+        if file_name_day == str(day) and file_name_month == str(month):
+            return file_name
+
+    # No match found
+    return None 
+
+def construct_visitor_file_name(date: datetime) -> str:
     """
     Constructs a file name for storing visitor data.
 
     Args:
         date (datetime): The current date and time.
-        location_short_title (str): The short title of the location.
 
     Returns:
         str: The constructed file name.
@@ -72,37 +90,38 @@ def construct_file_name(date: datetime, location_short_title: str) -> str:
     timestamp = date.strftime("%d-%m-%Y-%H-%M")
 
     # Generate a new filename with the timestamp
-    return f"visitors-{location_short_title}-{timestamp}.csv"
+    return f"visitors-{constants.LOCATION_SHORT_TITLE}-{timestamp}.csv"
 
 def calculate_sleep_time_in_seconds(date: datetime, opening_hour: int):
-    # Calculate the number of hours to sleep until the next day's opening time
-    # Example: If the current time is 23:34 and the opening time for tomorrow is exactly at 8 AM,
-    # the calculation would be: 24 - (23 + 1) = 0 hours until tomorrow (excluding the next day's opening hour)
-    # Additionally, 60 - 34 = 26 minutes until tomorrow (excluding the next day's opening hour)
-    # Therefore, the total hours to sleep until tomorrow would be (8 + 0) hours and 26 minutes, which is 506 minutes.
+    """
+    Calculates the number of seconds to sleep until the next day's opening time.
 
+    Args:
+        date (datetime): The current date and time.
+        opening_hour (int): The hour representing the opening time of the next day.
+
+    Returns:
+        int: The number of seconds to sleep until the next day's opening time.
+    """
+    # Determine if it is tomorrow based on the current time and the opening hour
     tomorrow = date.hour >= opening_hour
 
-    hours_to_sleep = opening_hour + (24 - (date.hour + 1)) 
+    # Calculate the number of hours to sleep until the next day's opening time
+    hours_to_sleep = opening_hour + (24 - (date.hour + 1))
     if not tomorrow:
-        # today: 
+        # If it's not tomorrow, adjust the hours to sleep
         hours_to_sleep = opening_hour - 1
     
     # Calculate the number of minutes to sleep, accounting for the missing minutes in the previous calculation
-    # Example: If the current time is 23:34, there are 60 minutes in an hour, so the minutes until the next hour would be 26.
-
     minutes_to_sleep = 60 - (date.minute + 1)
     
     # Calculate the total number of minutes to sleep
-    # Example: If the hours to sleep is 2 and the minutes to sleep is 26, the total minutes to sleep would be:
-    # 2 * 60 + 26 = 146 minutes until tomorrow
     total_minutes_to_sleep = (hours_to_sleep * 60) + minutes_to_sleep
     
+    # Calculate the number of seconds to sleep, accounting for the missing seconds in the previous calculation
     seconds_to_sleep = 60 - date.second
 
     # Convert the total minutes to sleep to seconds
-    # Example: If the total minutes to sleep is 146, to convert it to seconds, we multiply by 60:
-    # 146 * 60 = 8760 seconds until tomorrow
     sleep_time_in_seconds = (total_minutes_to_sleep * 60) + seconds_to_sleep
     
     return sleep_time_in_seconds

@@ -67,5 +67,4 @@ class TestDBUtils(TestCase):
 
         # Check if connection.commit() was called once.
         mock_connection.commit.assert_called_once()
-
-
+    

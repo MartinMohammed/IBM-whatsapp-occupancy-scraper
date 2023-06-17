@@ -29,7 +29,5 @@ class TestCSVUtils(TestCase):
             self.assertEqual(data[0], header)
             self.assertEqual(int(data[1][1]), 50)
 
-        # Remove the redundant file:
-        if os.path.exists(custom_file_path):
-            os.remove(custom_file_path)
+        os.remove(custom_file_path)
 

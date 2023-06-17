@@ -36,5 +36,10 @@
 
         - name: Test
           # Running the unit tests in our project using a Docker Compose command
+          # The docker compose run command is used to run a one-time command 
+          # within a service container. It creates a new container,
+          # executes the specified command, and then removes the container once the command completes.
+          # Since the container is not intended to be long-running, the restart policy defined in
+          # the Docker Compose file does not apply in this case.
           run: docker compose -f docker-compose.yml run --rm visitor-tracker sh -c "python3 test_runner.py"
   

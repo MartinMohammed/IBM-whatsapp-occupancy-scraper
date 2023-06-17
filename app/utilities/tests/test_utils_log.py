@@ -23,8 +23,7 @@ class TestLogUtils(TestCase):
             self.assertIn(error_message, log_contents)
 
         # Remove the redundant file:
-        if os.path.exists(custom_file_path):
-            os.remove(custom_file_path)
+        os.remove(custom_file_path)
 
     def test_log_file_path_not_provided(self, patched_print):
         """Test case for log function to check if file is created when no file path is provided."""

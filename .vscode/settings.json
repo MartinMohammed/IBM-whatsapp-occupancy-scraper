@@ -1,0 +1,5 @@
+{
+    "yaml.schemas": {
+        "https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json": "file:///Users/martin/Downloads/Programming/Own-Projects/gym-visitor-tracker/docker-compose.test.yml"
+    }
+}
