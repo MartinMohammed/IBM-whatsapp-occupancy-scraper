@@ -62,7 +62,7 @@ services:
       - '3000:3000'
     volumes:
       # Named volume for Grafana data storage
-      - grafana_data:/var/lib/grafana
+      - ./grafana_data:/var/lib/grafana
 
 
 volumes:

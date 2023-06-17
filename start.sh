@@ -3,7 +3,7 @@
 # Read additional parameters.
 param1="$1"  # The first additional parameter.
 
-mkdir -p $PWD/app/data $PWD/app/logs $PWD/portainer_data
+mkdir -p $PWD/app/data $PWD/app/logs $PWD/portainer_data $PWD/grafana_data
 
 # Check if the 'docker' command exists.
 if command -v docker >/dev/null 2>&1; then
