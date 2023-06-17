@@ -32,8 +32,8 @@ services:
       - POSTGRES_DB=fitness-fabrik-griesheim
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=admin123
-      - TZ="Europe/Berlin"
-      - PGTZ="Europe/Berlin"
+      - TZ=Europe/Berlin
+      - PGTZ=Europe/Berlin
       - LANG=de_DE.UTF-8
       - LANGUAGE=de_DE.UTF-8
       - LC_ALL=de_DE.UTF-8
