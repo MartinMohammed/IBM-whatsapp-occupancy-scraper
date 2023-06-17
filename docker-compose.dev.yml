@@ -50,7 +50,7 @@ services:
     ports:
       - 9443:9443
     volumes:
-      - data:/data
+      - ./portainer_data:/data
       - /var/run/docker.sock:/var/run/docker.sock
     restart: unless-stopped
 
@@ -65,11 +65,6 @@ services:
       - grafana_data:/var/lib/grafana
 
 
-
-# Named volume for general data storage
 volumes:
-  # Named volume managed by Docker
-  data:
-
   # Anonymous volume for Grafana
   grafana_data: {}

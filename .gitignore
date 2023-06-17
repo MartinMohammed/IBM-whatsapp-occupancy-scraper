@@ -8,6 +8,9 @@ postgres
 # Grafana
 grafana_data
 
+# portainer 
+portainer_data
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

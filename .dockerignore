@@ -11,6 +11,9 @@ postgres
 # Grafana
 grafana_data
 
+# Portainer
+portainer_data
+
 # Git
 .git
 .gitignore

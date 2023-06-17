@@ -11,9 +11,6 @@ COPY ./app /app
 # Set the working directory inside the container
 WORKDIR /app
 
-# Add the folders where the data and logs are written. 
-RUN mkdir -p ./data && mkdir -p ./logs
-
 # Copy the requirements.txt file to the container
 COPY ./requirements.txt /tmp/requirements.txt
 
