@@ -34,6 +34,9 @@ services:
       - POSTGRES_PASSWORD=admin123
       - TZ="Europe/Berlin"
       - PGTZ="Europe/Berlin"
+      - LANG=de_DE.UTF-8
+      - LANGUAGE=de_DE.UTF-8
+      - LC_ALL=de_DE.UTF-8
     volumes:
       - ./postgres/pgdata:/var/lib/postgresql/data
     ports:
