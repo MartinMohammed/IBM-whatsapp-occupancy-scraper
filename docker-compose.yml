@@ -18,6 +18,8 @@ services:
       - DB_USERNAME=admin
       - DB_PASSWORD=admin123
       - DB_PORT=5432
+      - TZ='UTC+2'
+      - PGTZ='UTC+2'
     depends_on:
       - db
     restart: on-failure
