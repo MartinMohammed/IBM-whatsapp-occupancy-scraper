@@ -6,7 +6,6 @@ This application serves as a base template for working as a worker and making GE
 
 The ultimate goal is to enable other programs to analyze the fetched data. This application can be cloned multiple times, each dedicated to monitoring the number of visitors in a specific studio.
 """
-
 import sys
 import os
 import time
@@ -77,6 +76,7 @@ def main():
 
     while True:
         now = datetime.now()
+        formatted_timestamp = now.strftime('%Y-%m-%d %H:%M')
         is_in_opening_hours = utils.check_if_in_opening_hours(now.hour, is_week_day)
 
         # Check if the studio is open based on the current time
@@ -101,7 +101,7 @@ def main():
 
             # =--------------------- SAVE THE DATA ---------------------=
             utils_csv.write_to_csv(file_path, HEADER, timestamp, current_load)
-            utils_db.save_to_db(connection, table_name=DB_TABLE_NAME, values=(now.strftime('%Y-%m-%d %H:%M'), current_load))
+            utils_db.save_to_db(connection, table_name=DB_TABLE_NAME, fields="(timestamp, visitor_count)", values=(formatted_timestamp, current_load))
             # =--------------------- SAVE THE DATA ---------------------=
 
             utils_log.log(message=f"Current load in {LOCATION_SHORT_TITLE}: {current_load}.")

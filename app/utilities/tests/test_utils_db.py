@@ -58,8 +58,9 @@ class TestDBUtils(TestCase):
         timestamp = 1000
         visitor_count = 59
 
-        utils_db.save_to_db(connection=mock_connection, table_name=table_name, values=(timestamp, visitor_count))
-        expected_query = f"INSERT INTO {table_name} (timestamp, visitor_count) VALUES(%s, %s)"
+        fields = "(timestamp TIMESTAMP, visitor_count INT)"
+        utils_db.save_to_db(connection=mock_connection, fields=fields, table_name=table_name, values=(timestamp, visitor_count))
+        expected_query = f"INSERT INTO {table_name} {fields} VALUES(%s, %s)"
 
         # Check if cursor.execute has correct constructed query in order to insert
         mock_cursor.execute.assert_called_once_with(expected_query, (timestamp, visitor_count))

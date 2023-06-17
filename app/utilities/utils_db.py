@@ -23,7 +23,7 @@ def create_table_if_not_exists(connection, table_name, fields):
         cursor.execute(query)
         connection.commit()
 
-def save_to_db(connection, table_name, values):
+def save_to_db(connection, table_name, fields, values):
     """
     Save entries to the specified table with the given values.
 
@@ -40,6 +40,6 @@ def save_to_db(connection, table_name, values):
         # Note: 
         # hen you pass an integer value as a parameter using %s in a formatted string and then save it to the database,
         #  the integer value will be properly stored in the corresponding integer column in the database.
-        query = f"INSERT INTO {table_name} (timestamp, visitor_count) VALUES(%s, %s)"
+        query = f"INSERT INTO {table_name} {fields} VALUES(%s, %s)"
         cursor.execute(query, values)
         connection.commit()
