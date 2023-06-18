@@ -14,8 +14,9 @@ if command -v docker-compose >/dev/null 2>&1 || command -v docker compose >/dev/
       docker compose -f docker-compose.dev.yml down -v
     # Check if the script is executed with the "--dev --raspi" options
     elif [ "$2" == "--raspi" ]; then 
-      # Clean up and remove volumes for Raspberry Pi environment
-      docker compose -f docker-compose.raspi.yml down -v
+     # Start the services defined in the development Docker Compose file.
+      docker compose -f docker-compose.raspi.yml up --build
+      
     # Second argument was not provided (or incorrect)
     else
       # Start the services defined in the development Docker Compose file.
