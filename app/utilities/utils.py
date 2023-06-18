@@ -75,12 +75,13 @@ def get_today_visitors_file_name_if_it_does_exist(year: int, month: int, day: in
         file_name_month = split_file_name[3]
         file_name_year = split_file_name[4]
 
-
+        utils_log.log(file_name)
         if file_name_day == day and file_name_month == month and file_name_year == year:
             utils_log.log(f"Found a existing file, continue writing there: {file_name}.")
             return file_name
 
     # No match found
+    
     utils_log.log(f"Did not found an existing file for day: {day}, month: {month}, {year}, create a new file.")
     return None 
 

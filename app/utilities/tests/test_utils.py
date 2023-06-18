@@ -67,8 +67,7 @@ class TestUtilities(unittest.TestCase):
         """Test if the *visitors* file with the given path already exists when the file was created."""
         patched_log = args[1]
         now = datetime.now()
-        now.replace(year=1980) # demo year. 
-
+        now = now.replace(year=1980) # demo year. 
         
 
         visitor_file_name = utils.construct_visitor_file_name(now)
@@ -85,7 +84,7 @@ class TestUtilities(unittest.TestCase):
         self.assertEqual(visitor_file_name_test_result, visitor_file_name)
 
         log_message = f"Found a existing file, continue writing there: {visitor_file_name}."
-        patched_log.assert_called_once_with(log_message)
+        patched_log.assert_called_with(log_message)
 
         # Remove the created file
         os.remove(visitor_file_path)
@@ -95,6 +94,7 @@ class TestUtilities(unittest.TestCase):
         """Test if the *visitors* file with the given path already exists when no file was created."""
         patched_log = args[1]
         now = datetime.now()
+        now = now.replace(year=1980) # demo year. 
 
         day = now.day
         month = now.month
@@ -106,7 +106,7 @@ class TestUtilities(unittest.TestCase):
         if (now.day < 10): day = f"0{now.day}"
         if (now.month < 10): month = f"0{now.month}"
         log_message = f"Did not found an existing file for day: {day}, month: {month}, {year}, create a new file."
-        patched_log.assert_called_once_with(log_message)
+        patched_log.assert_called_with(log_message)
 
 
     def test_check_if_in_opening_hours_week_day(self, *args):
