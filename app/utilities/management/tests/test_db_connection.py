@@ -14,16 +14,17 @@ class DBTest(TestCase):
     @patch("time.sleep")
     def test_db_connect(self, *args):
         """
-        Test the exponential backoff when the database is not online.
+        Test the connection to the database.
 
         The function performs the following steps:
         - Mocks the necessary objects and methods.
         - Sets up the side effects for the patched_connect function to simulate connection failures and success.
         - Calls the connect_to_db function.
-        - Verifies that sys.exit() is called when a DatabaseError occurs.
-        - Verifies that the log function is called with the expected messages.
-        - Verifies the number of times the log, connect, and sleep functions are called.
+        - Verifies that the patched_connect method is called with the expected parameters.
+        - Verifies that the cursor and execute methods are called.
+        - Verifies the return value of connect_to_db.
         """
+
 
 
 
