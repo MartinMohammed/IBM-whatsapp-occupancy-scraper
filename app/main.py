@@ -76,7 +76,7 @@ def main():
             1. Check all files in the current folder
             2. Search current day inside the file name
             """
-            visitor_file_name_if_exists = utils.get_today_visitors_file_name_if_it_does_exist(now.month, now.day)
+            visitor_file_name_if_exists = utils.get_today_visitors_file_name_if_it_does_exist(now.year, now.month, now.day)
 
             # No visitor_file for today was found, allowed to create a new one. 
             if visitor_file_name_if_exists == None: visitor_file_name_if_exists = file_name

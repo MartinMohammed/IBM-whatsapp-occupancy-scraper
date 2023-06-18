@@ -25,7 +25,8 @@ portainer_data
 
 # Docker
 docker-compose.yml
-docker-compose-dev.yml
+docker-compose.dev.yml
+docker-compose.raspi.yml
 .docker
 
 # Byte-compiled / optimized / DLL files

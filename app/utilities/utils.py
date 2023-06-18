@@ -57,27 +57,31 @@ def check_if_in_opening_hours(current_time: int, is_week_day: bool) -> bool:
 
     return studio_open <= current_time < studio_close
 
-def get_today_visitors_file_name_if_it_does_exist(month: int, day: int):
+def get_today_visitors_file_name_if_it_does_exist(year: int, month: int, day: int):
     """Checks if the visitors file for the provided month and day exists in the current directory."""
     # e.g. fixed pattern: 
     # day: index 14 start
     # visitors-FFGR-17-06-2023-20-00.csv
     day = f"0{day}" if day < 10 else str(day)
     month = f"0{month}" if month < 10 else str(month)
+    year = str(year)
 
     file_names = os.listdir(constants.DATA_DIRECTORY)
     for file_name in file_names:
         # (16 not included)
-        file_name_day = file_name.split("-")[2]
-        file_name_month = file_name.split("-")[3]
+        split_file_name = file_name.split("-")
+
+        file_name_day = split_file_name[2]
+        file_name_month = split_file_name[3]
+        file_name_year = split_file_name[4]
 
 
-        if file_name_day == day and file_name_month == month:
+        if file_name_day == day and file_name_month == month and file_name_year == year:
             utils_log.log(f"Found a existing file, continue writing there: {file_name}.")
             return file_name
 
     # No match found
-    utils_log.log(f"Did not found an existing file for day: {day} and month: {month}, create a new file.")
+    utils_log.log(f"Did not found an existing file for day: {day}, month: {month}, {year}, create a new file.")
     return None 
 
 def construct_visitor_file_name(date: datetime) -> str:

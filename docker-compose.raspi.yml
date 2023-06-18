@@ -1,0 +1,54 @@
+# Dockerfile specifically designed for the raspberry pi 
+version: "3"
+services:
+  visitor-tracker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - /mnt/usb/FFGR/data:/app/data  # Mount local folder to container for data storage
+      - /mnt/usb/FFGR/logs:/app/logs  # Mount local folder to container for log storage
+    environment:
+      # Gym-Tracker setup
+      - LOCATION_ID=3
+      - LOCATION_SHORT_TITLE=FFGR
+      - API_URL=https://bodycultureapp.de/ajax/studiocapacity?apiToken=5  # Set environment variable for API URL
+      # Database setup
+      - DB_HOSTNAME=db
+      - DB_NAME=fitness-fabrik-griesheim
+      - DB_USERNAME=admin
+      - DB_PASSWORD=admin123
+      - DB_PORT=5432
+    depends_on:
+      - db
+    restart: unless-stopped
+    command: >
+      sh -c "python3 ./test_runner.py && python3 ./main.py"  # Run the command to execute the Python script
+
+  db:
+    image: postgres:15.3-alpine3.17
+    restart: unless-stopped
+    environment:
+      - PGDATA=/var/lib/postgresql/data/pgdata
+      - POSTGRES_DB=fitness-fabrik-griesheim
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin123
+      - TZ=Europe/Berlin
+      - PGTZ=Europe/Berlin
+      - LANG=de_DE.UTF-8
+      - LANGUAGE=de_DE.UTF-8
+      - LC_ALL=de_DE.UTF-8
+    volumes:
+      - ./postgres/pgdata:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+  grafana:
+    image: grafana/grafana:10.0.0
+    container_name: grafana
+    restart: unless-stopped
+    ports:
+      - '3000:3000'
+    volumes:
+      # Named volume for Grafana data storage
+      - ./grafana_data:/var/lib/grafana
