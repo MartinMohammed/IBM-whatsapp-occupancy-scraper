@@ -58,10 +58,9 @@ class TestUtilities(unittest.TestCase):
         """Test case for the construct_visitor_file_name method."""
         current_time = datetime(year=2023, month=6, day=15, hour=10, minute=30, second=0)
         mocked_timestamp = current_time.strftime("%d-%m-%Y-%H-%M")
-        mocked_location_short_title = "FFGR"
 
         file_name = utils.construct_visitor_file_name(current_time)
-        self.assertEqual(file_name, f"visitors-{mocked_location_short_title}-{mocked_timestamp}.csv")
+        self.assertEqual(file_name, f"visitors-{constants.LOCATION_SHORT_TITLE}-{mocked_timestamp}.csv")
 
     def test_get_today_visitors_file_name_if_it_does_exist_file_created(self, *args):
         """Test if the *visitors* file with the given path already exists when the file was created."""

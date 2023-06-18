@@ -39,24 +39,44 @@ except AssertionError as e:
 # ----------------------- DATABASE CONNECTION -----------------------
 def connect_to_db():
     # Try to connect 10 times - exponential backoff
-    for i in range(10):
+    retry_delay = 1
+    retries = 10
+    for attempt in range(retries):
         try: 
             db_connection = psycopg2.connect(
                 host = DB_HOSTNAME, 
-                dbname = DB_NAME, 
+                # default db name. 
+                dbname = "postgres", 
                 user = DB_USERNAME, 
                 password = DB_PASSWORD, 
                 port = DB_PORT
             )
-            if db_connection.closed == 0: 
+            connection_succeed = db_connection.closed == 0
+            if connection_succeed: 
                 utils_log.log("Successful establlished connection to db.", file_path=os.path.join(constants.LOG_DIRECTORY, "db.log"))
+
+                # # Now create a new database if not exists 
+                # db_connection.cursor().execute(f"CREATE DATABASE IF NOT EXISTS {DB_NAME}")
+                # db_connection.commit()
+
+                # utils_log.log("Successful created database table if it not exists before.", file_path=os.path.join(constants.LOG_DIRECTORY, "db.log"))
+
                 return db_connection  # singleton? 
             else: 
-                utils_log.log(f"Connection failed, sleep {pow(2, i)} seconds.", file_path=os.path.join(constants.LOG_DIRECTORY, "db.log"))
+                utils_log.log(f"Connection failed, sleeping for {retry_delay} seconds.", file_path=os.path.join(constants.LOG_DIRECTORY, "db.log"))
                 # sleep and retry later again.
-                time.sleep(pow(2, i))
-        # failed
+                time.sleep(retry_delay)
+                retry_delay *= 2 # exponential backoff
+
+        except psycopg2.DatabaseError as e:
+            utils_log.log(f"Error creating database {DB_NAME}: {str(e)}", file_path=os.path.join(constants.LOG_DIRECTORY, "db.log"))
+            sys.exit(1) # database creation failed -> cannot continue!
+            
         except psycopg2.Error as e:
-            utils_log.log(f"Error connecting to the database (sleep {pow(2, i)} seconds.): {str(e)}", file_path=os.path.join(constants.LOG_DIRECTORY, "db.log"))
-            # sleep and retry later again.
-            time.sleep(pow(2, i))
+            utils_log.log(f"Error connecting to the database (sleep {retry_delay} seconds.): {str(e)}", file_path=os.path.join(constants.LOG_DIRECTORY, "db.log"))
+            time.sleep(retry_delay) # database connection attempt failed -> sleep and retry later again.
+
+    utils_log.log(f"Failed to establish a database connection after multiple {retries} attempts.",
+                  file_path=os.path.join(constants.LOG_DIRECTORY, "db.log"))
+    sys.exit(1)
+
