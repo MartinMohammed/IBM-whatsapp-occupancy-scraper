@@ -61,8 +61,10 @@ def connect_to_db():
                 if not database_does_exist:
                     db_connection.cursor().execute(f"CREATE DATABASE {DB_NAME}")
                     db_connection.commit()
+                    utils_log.log(f"Successful created database {DB_NAME}.", file_path=os.path.join(constants.LOG_DIRECTORY, "db.log"))
+                else: 
+                    utils_log.log(f"Database {DB_NAME} does already exist.", file_path=os.path.join(constants.LOG_DIRECTORY, "db.log"))
 
-                utils_log.log("Successful created database table if it not exists before.", file_path=os.path.join(constants.LOG_DIRECTORY, "db.log"))
 
                 return db_connection  # singleton? 
             else: 

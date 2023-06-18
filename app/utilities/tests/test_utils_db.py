@@ -104,13 +104,13 @@ class TestDBUtils(TestCase):
         mocked_cursor.assert_called_once()
 
         # Check if the query was executed on the cursor
-        mocked_cursor.execute.assert_called_once_with(expected_query)
+        mocked_cursor.return_value.execute.assert_called_once_with(expected_query)
 
         # Check if the result was fetched from the cursor
-        mocked_cursor.fetchone.assert_called_once()
+        mocked_cursor.return_value.fetchone.assert_called_once()
 
         # Check if the cursor was closed appropriately
-        mocked_cursor.close.assert_called_once()
+        mocked_cursor.return_value.close.assert_called_once()
 
         # Assert that the database existence is correctly identified as True
         self.assertTrue(does_exist)
