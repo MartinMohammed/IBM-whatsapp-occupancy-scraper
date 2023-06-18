@@ -62,20 +62,22 @@ def get_today_visitors_file_name_if_it_does_exist(month: int, day: int):
     # e.g. fixed pattern: 
     # day: index 14 start
     # visitors-FFGR-17-06-2023-20-00.csv
+    day = f"0{day}" if day < 10 else str(day)
+    month = f"0{month}" if month < 10 else str(month)
+
     file_names = os.listdir(constants.DATA_DIRECTORY)
     for file_name in file_names:
         # (16 not included)
         file_name_day = file_name.split("-")[2]
         file_name_month = file_name.split("-")[3]
 
-        if (day < 10): day = f"0{day}"
-        if (month < 10): month = f"0{month}"
-        if file_name_day == str(day) and file_name_month == str(month):
+
+        if file_name_day == day and file_name_month == month:
             utils_log.log(f"Found a existing file, continue writing there: {file_name}.")
             return file_name
 
     # No match found
-    utils_log.log(f"Did found an existing file for day: {day} and month: {month}, create a new file.")
+    utils_log.log(f"Did not found an existing file for day: {day} and month: {month}, create a new file.")
     return None 
 
 def construct_visitor_file_name(date: datetime) -> str:

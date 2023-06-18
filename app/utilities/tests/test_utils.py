@@ -69,6 +69,8 @@ class TestUtilities(unittest.TestCase):
         now = datetime.now()
         now.replace(year=1980) # demo year. 
 
+        
+
         visitor_file_name = utils.construct_visitor_file_name(now)
         visitor_file_path = os.path.join(constants.DATA_DIRECTORY, visitor_file_name)
 
@@ -81,6 +83,7 @@ class TestUtilities(unittest.TestCase):
         # 2. Verify that the function returns the file_path because the file already exists in the given folder destination.
         visitor_file_name_test_result = utils.get_today_visitors_file_name_if_it_does_exist(now.month, now.day)
         self.assertEqual(visitor_file_name_test_result, visitor_file_name)
+
         log_message = f"Found a existing file, continue writing there: {visitor_file_name}."
         patched_log.assert_called_once_with(log_message)
 
@@ -92,11 +95,16 @@ class TestUtilities(unittest.TestCase):
         """Test if the *visitors* file with the given path already exists when no file was created."""
         patched_log = args[1]
         now = datetime.now()
+        day = now.day
+        month = now.month
+
         visitor_file_name = utils.construct_visitor_file_name(now)
         visitor_file = utils.get_today_visitors_file_name_if_it_does_exist(now.month, now.day)
         self.assertEqual(visitor_file, None)
 
-        log_message = f"Did found an existing file for day: {now.day} and month: {now.month}, create a new file."
+        if (now.day < 10): day = f"0{now.day}"
+        if (now.month < 10): month = f"0{now.month}"
+        log_message = f"Did not found an existing file for day: {day} and month: {month}, create a new file."
         patched_log.assert_called_once_with(log_message)
 
 
