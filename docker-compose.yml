@@ -3,7 +3,7 @@ services:
   visitor-tracker:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: ./app/Dockerfile
     volumes:
       - ./app/data:/app/data  # Mount local folder to container for data storage
       - ./app/logs:/app/logs  # Mount local folder to container for log storage

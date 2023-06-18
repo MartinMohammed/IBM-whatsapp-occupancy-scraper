@@ -4,7 +4,7 @@ services:
   visitor-tracker:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: ./app/Dockerfile
     volumes:
       - /mnt/usb/FFGR/data:/app/data  # Mount local folder to container for data storage
       - /mnt/usb/FFGR/logs:/app/logs  # Mount local folder to container for log storage
