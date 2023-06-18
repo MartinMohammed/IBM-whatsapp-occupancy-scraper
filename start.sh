@@ -26,7 +26,7 @@ if command -v docker-compose >/dev/null 2>&1; then
     docker compose -f docker-compose.yml  run --rm visitor-tracker sh -c "python3 test_runner.py"
 
   else
-    docker-compose -f ./docker-compose.yml up --build  # Start the services defined in the Docker Compose file.
+    docker compose -f ./docker-compose.yml up --build  # Start the services defined in the Docker Compose file.
   fi
   
   # Check if the script is executed with the "--dev --clean" options
