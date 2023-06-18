@@ -1,12 +1,13 @@
 from unittest import (TestCase, mock)
 from .. import utils_db
 
+@mock.patch("utilities.utils_log.log")
 @mock.patch("builtins.print")
 class TestDBUtils(TestCase):
     """Tests related to DB tools"""
 
     # --------------------- FOR DATABASE --------------------- #
-    def test_create_table_if_not_exists(self, patched_print):
+    def test_create_table_if_not_exists(self, *args):
         """
         Test if the create_table_if_not_exists method constructs a correct query to execute.
 
@@ -37,7 +38,7 @@ class TestDBUtils(TestCase):
         mock_connection.commit.assert_called_once()
 
 
-    def test_save_to_db(self, patched_print):
+    def test_save_to_db(self, *args):
         """
         Check if the save_to_db method creates the correct query for the cursor to execute.
 

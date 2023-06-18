@@ -3,6 +3,8 @@ from unittest.mock import patch, MagicMock
 import os
 import psycopg2
 from ..db_connect import connect_to_db
+
+
 @patch("utilities.utils_log.log")
 @patch("builtins.print")
 @patch("psycopg2.connect")
@@ -10,7 +12,7 @@ class DBTest(TestCase):
 
 
     @patch("time.sleep")
-    def test_db_connect(self, patched_sleep, patched_connect, patched_print, patched_log):
+    def test_db_connect(self, *args):
         """
         Test that connect_to_db calls the patched_connect method with certain parameters to connect to the database.
         """
@@ -18,6 +20,7 @@ class DBTest(TestCase):
         connect_to_db()
 
         # Assert that the patched_connect method was called exactly once with the expected parameters
+        patched_connect = args[1]
         patched_connect.assert_called_with(
             host=os.environ.get("DB_HOSTNAME"),
             dbname=os.environ.get("DB_NAME"),
@@ -35,10 +38,14 @@ class DBTest(TestCase):
         patched_connect.assert_called()
 
     @patch("time.sleep")
-    def test_wait_for_db_delay(self, patched_sleep, patched_connect, patched_print, patched_log):
+    def test_wait_for_db_delay(self, *args):
         """
         Test the exponential backoff when the database is not online.
         """
+
+        patched_sleep = args[0]
+        patched_connect = args[1]
+        patched_log = args[3]
 
         # Create MagicMock instances to mock the original connection instances
         mock_instance1 = MagicMock()

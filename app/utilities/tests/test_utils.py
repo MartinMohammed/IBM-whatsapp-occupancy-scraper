@@ -9,6 +9,7 @@ from .. import constants
 from .. import utils
 
 
+@mock.patch("utilities.utils_log.log")
 @mock.patch("builtins.print")
 class TestUtilities(unittest.TestCase):
     """
@@ -31,7 +32,7 @@ class TestUtilities(unittest.TestCase):
         if not os.path.exists(logs_dir_path):
             os.makedirs(logs_dir_path, exist_ok=True)
 
-    def test_fetch_data(self, _):
+    def test_fetch_data(self, *args):
         """
         Test case for fetch_data function.
         """
@@ -41,7 +42,7 @@ class TestUtilities(unittest.TestCase):
             res_json = utils.fetch_data(URL)
         self.assertEqual(res_json, {"data": "example data"})
 
-    def test_check_is_week_day(self, _):
+    def test_check_is_week_day(self, *args):
         """
         Test case to check if the current day is a week day (Monday to Friday).
         """
@@ -53,7 +54,7 @@ class TestUtilities(unittest.TestCase):
             self.assertion_count += 1
         self.assertEqual(self.assertion_count, len(days))
 
-    def test_construct_visitor_file_name(self, _):
+    def test_construct_visitor_file_name(self, *args):
         """Test case for the construct_visitor_file_name method."""
         current_time = datetime(year=2023, month=6, day=15, hour=10, minute=30, second=0)
         mocked_timestamp = current_time.strftime("%d-%m-%Y-%H-%M")
@@ -62,39 +63,44 @@ class TestUtilities(unittest.TestCase):
         file_name = utils.construct_visitor_file_name(current_time)
         self.assertEqual(file_name, f"visitors-{mocked_location_short_title}-{mocked_timestamp}.csv")
 
-    def test_get_today_visitors_file_name_if_it_does_exist_file_created(self, _):
+    def test_get_today_visitors_file_name_if_it_does_exist_file_created(self, *args):
         """Test if the *visitors* file with the given path already exists when the file was created."""
+        patched_log = args[1]
         now = datetime.now()
+        now.replace(year=1980) # demo year. 
+
         visitor_file_name = utils.construct_visitor_file_name(now)
         visitor_file_path = os.path.join(constants.DATA_DIRECTORY, visitor_file_name)
 
-        # make sure we're not deleting a file that already exists: 
-        # When testing, the data folder will not exist. 
-        # But when runnning in dev or production it could be that the test would delete the current day file
-        if not os.path.exists(visitor_file_path):
-            # 1. Create a test file
-            with open(visitor_file_path, "w") as _:
-                pass
+
+        # 1. Create a test file
+        with open(visitor_file_path, "w") as _:
+            pass
 
 
-            # 2. Verify that the function returns the file_path because the file already exists in the given folder destination.
-            visitor_file_name_test_result = utils.get_today_visitors_file_name_if_it_does_exist(now.month, now.day)
-            self.assertEqual(visitor_file_name_test_result, visitor_file_name)
+        # 2. Verify that the function returns the file_path because the file already exists in the given folder destination.
+        visitor_file_name_test_result = utils.get_today_visitors_file_name_if_it_does_exist(now.month, now.day)
+        self.assertEqual(visitor_file_name_test_result, visitor_file_name)
+        log_message = f"Found a existing file, continue writing there: {visitor_file_name}."
+        patched_log.assert_called_once_with(log_message)
 
-            # Remove the created file
-            os.remove(visitor_file_path)
+        # Remove the created file
+        os.remove(visitor_file_path)
 
 
-    def test_get_today_visitors_file_name_if_it_does_exist_no_file_created(self, _):
+    def test_get_today_visitors_file_name_if_it_does_exist_no_file_created(self, *args):
         """Test if the *visitors* file with the given path already exists when no file was created."""
+        patched_log = args[1]
         now = datetime.now()
         visitor_file_name = utils.construct_visitor_file_name(now)
-        visitor_file_path = os.path.join(constants.DATA_DIRECTORY, visitor_file_name)
-        if not os.path.exists(visitor_file_path):
-            visitor_file = utils.get_today_visitors_file_name_if_it_does_exist(now.month, now.day)
-            self.assertEqual(visitor_file, None)
+        visitor_file = utils.get_today_visitors_file_name_if_it_does_exist(now.month, now.day)
+        self.assertEqual(visitor_file, None)
 
-    def test_check_if_in_opening_hours_week_day(self, _):
+        log_message = f"Did found an existing file for day: {now.day} and month: {now.month}, create a new file."
+        patched_log.assert_called_once_with(log_message)
+
+
+    def test_check_if_in_opening_hours_week_day(self, *args):
         """
         Test case to check if the current time is within the opening hours of the Griesheim gym on weekdays.
         """
@@ -111,7 +117,7 @@ class TestUtilities(unittest.TestCase):
 
         self.assertEqual(self.assertion_count, len(hours))
 
-    def test_check_if_in_opening_hours_week_end(self, _):
+    def test_check_if_in_opening_hours_week_end(self, *args):
         """Test case for checking if the current hour is within the opening hours of the Griesheim gym on weekends."""
         open_hour = self.opening_hours["week_end"].get("open")
         close_hour = self.opening_hours["week_end"].get("close")
@@ -126,7 +132,7 @@ class TestUtilities(unittest.TestCase):
 
         self.assertEqual(self.assertion_count, len(hours))
 
-    def test_calculate_sleep_time_in_seconds(self, _):
+    def test_calculate_sleep_time_in_seconds(self, *args):
         """
         Test case for the calculate_sleep_time_in_seconds function.
         Checks if it returns the correct amount of seconds until the opening time tomorrow.

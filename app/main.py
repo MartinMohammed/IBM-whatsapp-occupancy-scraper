@@ -103,15 +103,16 @@ def main():
 
             # integer division 
             sleep_hours = sleep_seconds // 60 // 60
+            sleep_minutes = sleep_minutes // 60
 
-            utils_log.log(f"Now sleep: {sleep_hours} hours.")
+            utils_log.log(f"Studio is closed now sleep: {sleep_hours} hours and {sleep_minutes} minutes.")
             time.sleep(sleep_seconds)   
 
             # ---------------- FINISH SLEEPING ----------------
-            utils_log.log(f"Sleeped: {sleep_hours} hours.")
+            utils_log.log(f"Sleeped: {sleep_hours} hours and {sleep_minutes} minutes. Ready to conntinue.")
 
             # After sleeping create a new file
-            time_after_sleeping = now + timedelta(hours=sleep_hours)
+            time_after_sleeping = now + timedelta(hours=sleep_hours, minutes=sleep_minutes)
 
             file_name = utils.construct_visitor_file_name(time_after_sleeping)
             is_week_day = utils.check_is_week_day(time_after_sleeping.weekday())

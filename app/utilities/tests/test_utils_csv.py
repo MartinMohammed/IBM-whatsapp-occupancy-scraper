@@ -6,11 +6,12 @@ from .. import constants
 
 from .. import utils_csv
 
+@mock.patch("utilities.utils_log.log")
 @mock.patch("builtins.print")
 class TestCSVUtils(TestCase):
     """Tests related to CSV tools."""
 
-    def test_write_to_csv(self, patched_print):
+    def test_write_to_csv(self, *args):
         """
         Test case for write_to_csv function.
         """
