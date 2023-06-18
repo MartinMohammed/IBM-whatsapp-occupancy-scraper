@@ -13,6 +13,19 @@ fi
 
 # Check if the 'docker-compose' command exists.
 if command -v docker-compose >/dev/null 2>&1 || command -v docker compose >/dev/null; then
+
+  # Check if the script is executed with the "--dev --clean" options
+  if [[ "$1" == "--dev" && "$2" == "--clean" ]]; then
+    # Clean up and remove volumes for development environment
+    docker compose -f docker-compose.dev.yml down -v
+  fi
+
+  # Check if the script is executed with the "--dev --raspi" options
+  if [[ "$1" == "--dev" && "$2" == "--raspi" ]]; then
+    # Clean up and remove volumes for Raspberry Pi environment
+    docker compose -f docker-compose.raspi.yml down -v
+  fi
+
   if [ "$1" == "--dev" ]; then
     # Start the services defined in the development Docker Compose file.
     docker compose -f docker-compose.dev.yml up --build
@@ -27,17 +40,6 @@ if command -v docker-compose >/dev/null 2>&1 || command -v docker compose >/dev/
     docker compose -f docker-compose.yml up --build
   fi
 
-  # Check if the script is executed with the "--dev --clean" options
-  if [[ "$1" == "--dev" && "$2" == "--clean" ]]; then
-    # Clean up and remove volumes for development environment
-    docker compose -f docker-compose.dev.yml down -v
-  fi
-
-  # Check if the script is executed with the "--dev --raspi" options
-  if [[ "$1" == "--dev" && "$2" == "--raspi" ]]; then
-    # Clean up and remove volumes for Raspberry Pi environment
-    docker compose -f docker-compose.raspi.yml down -v
-  fi
 
 else
   echo "The command 'docker-compose' does not exist."
