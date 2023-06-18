@@ -50,4 +50,32 @@ def save_to_db(connection, table_name, fields, values):
         connection.commit()
         utils_log.log(f"Successful saved data into {table_name} with fields: '${fields}'.", os.path.join(constants.LOG_DIRECTORY, "db.log"))
 
-        
+def check_if_database_exists(db_connection, db_name: str) -> bool:
+    """
+    Check if the specific database already exists in the PostgreSQL instance.
+
+    :param db_connection: PostgreSQL database connection object.
+    :param db_name: Name of the database to check.
+    :return: True if the database exists, False otherwise.
+    """
+    
+    # Construct the query to check if the database exists
+    query = f"SELECT datname FROM pg_database WHERE datname = '{db_name}';"
+    
+    # Create a cursor object to execute the query
+    cursor = db_connection.cursor()
+    
+    # Execute the query
+    cursor.execute(query)
+    
+    # Fetch the result (one row)
+    result = cursor.fetchone()
+    
+    # Close the cursor
+    cursor.close()
+    
+    # Return True if a row is fetched (database exists), False otherwise
+    if result:
+        return True  # Database exists
+    else:
+        return False  # Database does not exist

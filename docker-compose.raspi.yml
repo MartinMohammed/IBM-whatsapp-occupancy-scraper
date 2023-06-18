@@ -1,29 +1,29 @@
 # Dockerfile specifically designed for the raspberry pi 
 version: "3"
 services:
-  # visitor-tracker-ffgr:
-  #   build:
-  #     context: .
-  #     dockerfile: ./app/Dockerfile
-  #   volumes:
-  #     - /mnt/usb/FFGR/data:/app/data  # Mount local folder to container for data storage
-  #     - /mnt/usb/FFGR/logs:/app/logs  # Mount local folder to container for log storage
-  #   environment:
-  #     # Gym-Tracker setup
-  #     - LOCATION_SHORT_TITLE=FFGR
+  visitor-tracker-ffgr:
+    build:
+      context: .
+      dockerfile: ./app/Dockerfile
+    volumes:
+      - /mnt/usb/FFGR/data:/app/data  # Mount local folder to container for data storage
+      - /mnt/usb/FFGR/logs:/app/logs  # Mount local folder to container for log storage
+    environment:
+      # Gym-Tracker setup
+      - LOCATION_SHORT_TITLE=FFGR
 
-  #     # Database setup
-  #     - DB_HOSTNAME=db
-  #     # TODO: Think about it should create db base on the gym name
-  #     - DB_NAME=fitness-fabrik-griesheim
-  #     - DB_USERNAME=admin
-  #     - DB_PASSWORD=admin123
-  #     - DB_PORT=5432
-  #   depends_on:
-  #     - db
-  #   restart: unless-stopped
-  #   command: >
-  #     sh -c "python3 ./test_runner.py && python3 ./main.py"  # Run the command to execute the Python script
+      # Database setup
+      - DB_HOSTNAME=db
+      # TODO: Think about it should create db base on the gym name
+      - DB_NAME=fitness-fabrik-griesheim
+      - DB_USERNAME=admin
+      - DB_PASSWORD=admin123
+      - DB_PORT=5432
+    depends_on:
+      - db
+    restart: unless-stopped
+    command: >
+      sh -c "python3 ./test_runner.py && python3 ./main.py"  # Run the command to execute the Python script
 
   visitor-tracker-ffda:
     build:

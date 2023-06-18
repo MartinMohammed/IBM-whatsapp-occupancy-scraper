@@ -1,4 +1,5 @@
 from unittest import (TestCase, mock)
+import os
 from .. import utils_db
 
 @mock.patch("utilities.utils_log.log")
@@ -69,3 +70,52 @@ class TestDBUtils(TestCase):
         # Check if connection.commit() was called once.
         mock_connection.commit.assert_called_once()
     
+    
+    def test_check_if_database_exists_true(self, *args):
+        """
+        Test if a specific database already exists when it does exist.
+
+        The function performs the following steps:
+        - Creates mocked instances for the database connection and cursor.
+        - Sets up the expected query and fetchone result to simulate the existence of the database.
+        - Calls the `check_if_database_exists` function.
+        - Verifies that the cursor, execute, fetchone, and close methods are called with the expected arguments.
+        - Asserts that the database existence is correctly identified as True.
+        """
+
+        # Create mocked instances for the database connection and cursor
+        mocked_connection = mock.MagicMock()
+        mocked_cursor = mock.MagicMock()
+
+        mocked_connection.cursor = mocked_cursor
+
+        db_name = os.getenv("DB_NAME")
+
+        # Set the fetchone result to True, indicating that the database exists for this test
+        mocked_cursor.fetchone.return_value = True
+
+        # Call the check_if_database_exists function
+        does_exist = utils_db.check_if_database_exists(db_connection=mocked_connection, db_name=db_name)
+
+        # Set up the expected query
+        expected_query = f"SELECT datname FROM pg_database WHERE datname = '{db_name}';"
+
+        # Check if the cursor was called to create a cursor
+        mocked_cursor.assert_called_once()
+
+        # Check if the query was executed on the cursor
+        mocked_cursor.execute.assert_called_once_with(expected_query)
+
+        # Check if the result was fetched from the cursor
+        mocked_cursor.fetchone.assert_called_once()
+
+        # Check if the cursor was closed appropriately
+        mocked_cursor.close.assert_called_once()
+
+        # Assert that the database existence is correctly identified as True
+        self.assertTrue(does_exist)
+
+
+
+
+

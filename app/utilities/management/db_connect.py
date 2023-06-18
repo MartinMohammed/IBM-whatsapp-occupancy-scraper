@@ -4,7 +4,7 @@ import os
 import sys
 import time
 import psycopg2
-from .. import utils_log
+from .. import (utils_log, utils_db)
 from .. import constants
 
 # ----------------------- DATABASE CONNECTION -----------------------
@@ -56,8 +56,11 @@ def connect_to_db():
                 utils_log.log("Successful establlished connection to db.", file_path=os.path.join(constants.LOG_DIRECTORY, "db.log"))
 
                 # Now create a new database if not exists 
-                db_connection.cursor().execute(f"CREATE DATABASE IF NOT EXISTS {DB_NAME}")
-                db_connection.commit()
+                database_does_exist = utils_db.check_if_database_exists(db_connection=db_connection, db_name=DB_NAME)
+
+                if not database_does_exist:
+                    db_connection.cursor().execute(f"CREATE DATABASE {DB_NAME}")
+                    db_connection.commit()
 
                 utils_log.log("Successful created database table if it not exists before.", file_path=os.path.join(constants.LOG_DIRECTORY, "db.log"))
 
