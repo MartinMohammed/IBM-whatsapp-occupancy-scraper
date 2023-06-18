@@ -12,7 +12,7 @@ if [[ "$1" == "--dev" && "$2" == "--clean" ]]; then
 fi
 
 # Check if the 'docker-compose' command exists.
-if command -v docker-compose >/dev/null 2>&1; then
+if command -v docker-compose >/dev/null 2>&1 || command -v docker compose >/dev/null; then
   if [ "$1" == "--dev" ]; then
     # Start the services defined in the development Docker Compose file.
     docker compose -f docker-compose.dev.yml up --build
