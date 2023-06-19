@@ -76,7 +76,7 @@ services:
     restart: unless-stopped
     environment:
       - PGDATA=/var/lib/postgresql/data/pgdata
-      - POSTGRES_DB=fitness-fabrik-griesheim
+      - POSTGRES_DB=fitness_fabrik_griesheim # default created db besides 'postgres'
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=admin123
 

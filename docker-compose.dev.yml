@@ -69,13 +69,22 @@ services:
     restart: unless-stopped
     command: >
       sh -c "python3 ./test_runner.py && python3 ./main.py"  # Run the command to execute the Python script
+    
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "80:80"
 
   db:
     image: postgres:15.3-alpine3.17
     restart: unless-stopped
     environment:
       - PGDATA=/var/lib/postgresql/data/pgdata
-      - POSTGRES_DB=fitness-fabrik-griesheim
+      - POSTGRES_DB=fitness_fabrik_griesheim # default created db besides 'postgres'
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=admin123
       - TZ=Europe/Berlin
