@@ -134,18 +134,26 @@ class TestUtilities(unittest.TestCase):
 
         self.assertEqual(self.assertion_count, len(hours))
 
-    def test_calculate_sleep_time_in_seconds(self, *args):
+    def test_calculate_sleep_time_in_seconds_for_tomorrow(self, *args):
         """
         Test case for the calculate_sleep_time_in_seconds function.
         Checks if it returns the correct amount of seconds until the opening time tomorrow.
         """
-
         current_time = datetime(year=2023, month=6, day=15, hour=23, minute=34, second=35)
         amount_of_seconds = utils.calculate_sleep_time_in_seconds(current_time, 8)
 
         self.assertEqual(amount_of_seconds, 30325)
 
-        current_time = datetime(year=2023, month=6, day=15, hour=0, minute=40, second=55)
-        amount_of_seconds = utils.calculate_sleep_time_in_seconds(current_time, 11)
+    def test_calculate_sleep_time_in_seconds_for_today(self, *args): 
+       # today 
+        current_time = datetime(year=2023, month=6, day=16, hour=3, minute=40, second=55)
+        amount_of_seconds = utils.calculate_sleep_time_in_seconds(current_time, 8)
 
-        self.assertEqual(amount_of_seconds, 37145)
+        self.assertEqual(amount_of_seconds, 15545)
+
+        # 5:29 AM and 20 seconds 
+        current_time = datetime(year=2023, month=6, day=16, hour=5, minute=29, second=20)
+
+        amount_of_seconds = utils.calculate_sleep_time_in_seconds(current_time, 8)
+        self.assertEqual(amount_of_seconds, 9040)
+

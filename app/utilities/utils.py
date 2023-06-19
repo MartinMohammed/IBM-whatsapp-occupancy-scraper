@@ -119,7 +119,10 @@ def calculate_sleep_time_in_seconds(date: datetime, opening_hour: int):
     hours_to_sleep = opening_hour + (24 - (date.hour + 1))
     if not tomorrow:
         # If it's not tomorrow, adjust the hours to sleep
-        hours_to_sleep = opening_hour - 1
+        # Calculate the time until it is opening hours
+        # e.g. opens at 8am, and it is not 3:34 am 
+        # 8 - 4 =  hours until 7:34
+        hours_to_sleep = opening_hour - (date.hour + 1)
     
     # Calculate the number of minutes to sleep, accounting for the missing minutes in the previous calculation
     minutes_to_sleep = 60 - (date.minute + 1)
