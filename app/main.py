@@ -35,7 +35,7 @@ try:
     assert DB_HOSTNAME, "DB_HOSTNAME environment variable is not set."
 
     # Check if DB_NAME is provided
-    DB_NAME = os.environ.get("DB_NAME").replace("-", "_")
+    DB_NAME = os.environ.get("DB_NAME").replace("-", "_").lower()
     assert DB_NAME, "DB_NAME environment variable is not set."
 
     # Check if DB_USERNAME is provided

@@ -57,7 +57,7 @@ def connect_to_db(db_host, db_name, db_user, db_password, db_port, recursion_dep
                     # Obtain a database cursor
                     with db_connection.cursor() as cursor:
                         # Create a new database
-                        cursor.execute(f"CREATE DATABASE {db_name.replace('-', '_')}")
+                        cursor.execute(f"CREATE DATABASE {db_name}")
 
                         db_connection.autocommit = False
 
