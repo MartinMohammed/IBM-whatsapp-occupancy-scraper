@@ -35,16 +35,19 @@ clean_dev_environment() {
 
 # Start the services defined in the development Docker Compose file
 start_dev_services() {
+  create_directories  # Call create_directories to have the required folders created. 
   docker compose -f docker-compose.dev.yml up --build
 }
 
 # Start the services defined in the development Docker Compose file for Raspberry Pi
 start_raspi_services() {
+  create_directories  # Call create_directories to have the required folders created. 
   docker compose -f docker-compose.raspi.yml up --build
 }
 
 # Start the services defined in the production Docker Compose file
 start_production_services() {
+  create_directories  # Call create_directories to have the required folders created. 
   docker compose -f docker-compose.yml up --build
 }
 
