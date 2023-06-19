@@ -78,7 +78,17 @@ def connect_to_db(db_host, db_name, db_user, db_password, db_port, recursion_dep
                         )
                 else:
                     utils_log.log(f"Database {db_name} already exists. Continuing writing to that database.", file_path=db_log_file_path)
-                    return db_connection
+                    db_connection.close()
+
+                    # Return connection to already existing database. 
+                    new_connection =  psycopg2.connect(
+                        host=db_host,
+                        database=db_name,
+                        user=db_user,
+                        password=db_password,
+                        port=db_port
+                    )
+                    return new_connection
 
             else:
                 utils_log.log(f"Connection failed. Sleeping for {retry_delay} seconds.", file_path=db_log_file_path)
