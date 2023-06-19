@@ -1,6 +1,6 @@
 version: "3"
 services:
-  visitor-tracker:
+  ffgr:
     build:
       context: .
       dockerfile: ./app/Dockerfile
@@ -9,12 +9,58 @@ services:
       - ./app/logs:/app/logs  # Mount local folder to container for log storage
     environment:
       # Gym-Tracker setup
-      - LOCATION_ID=3
       - LOCATION_SHORT_TITLE=FFGR
-      - API_URL=https://bodycultureapp.de/ajax/studiocapacity?apiToken=5  # Set environment variable for API URL
+
       # Database setup
       - DB_HOSTNAME=db
+      # TODO: Think about it should create db base on the gym name
       - DB_NAME=fitness-fabrik-griesheim
+      - DB_USERNAME=admin
+      - DB_PASSWORD=admin123
+      - DB_PORT=5432
+    depends_on:
+      - db
+    restart: unless-stopped
+    command: >
+      sh -c "python3 ./test_runner.py && python3 ./main.py"  # Run the command to execute the Python script
+
+  ffda:
+    build:
+      context: .
+      dockerfile: ./app/Dockerfile
+    volumes:
+      - ./app/data:/app/data  # Mount local folder to container for data storage
+      - ./app/logs:/app/logs  # Mount local folder to container for log storage
+    environment:
+       # Gym-Tracker setup
+      - LOCATION_SHORT_TITLE=FFDA
+
+      # Database setup
+      - DB_HOSTNAME=db
+      - DB_NAME=fitness-fabrik-darmstadt
+      - DB_USERNAME=admin
+      - DB_PASSWORD=admin123
+      - DB_PORT=5432
+    depends_on:
+      - db
+    restart: unless-stopped
+    command: >
+      sh -c "python3 ./test_runner.py && python3 ./main.py"  # Run the command to execute the Python script
+
+  ffhb:
+    build:
+      context: .
+      dockerfile: ./app/Dockerfile
+    volumes:
+      - ./app/data:/app/data  # Mount local folder to container for data storage
+      - ./app/logs:/app/logs  # Mount local folder to container for log storage
+    environment:
+      # Gym-Tracker setup
+      - LOCATION_SHORT_TITLE=FFHB
+      
+      # Database setup
+      - DB_HOSTNAME=db
+      - DB_NAME=fitness-fabrik-darmstadt-hbf
       - DB_USERNAME=admin
       - DB_PASSWORD=admin123
       - DB_PORT=5432
@@ -43,7 +89,7 @@ services:
       - 5432:5432
 
   grafana:
-    image: ./grafana/grafana:10.0.0
+    image: grafana/grafana:10.0.0
     container_name: grafana
     restart: unless-stopped
     ports:

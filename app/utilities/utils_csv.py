@@ -1,6 +1,7 @@
-"""Utilties related with working with csv I/O operations."""
-import os 
-import csv 
+"""Utilities related to working with CSV I/O operations."""
+import os
+import csv
+
 
 def write_to_csv(file_path: str, header: list, *args):
     """
@@ -20,3 +21,4 @@ def write_to_csv(file_path: str, header: list, *args):
         if os.path.getsize(filename=file_path) == 0:
             csv_writer.writerow(header)
         csv_writer.writerow(args)
+

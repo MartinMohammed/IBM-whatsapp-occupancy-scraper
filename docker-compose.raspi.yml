@@ -1,13 +1,13 @@
 # Dockerfile specifically designed for the raspberry pi 
 version: "3"
 services:
-  visitor-tracker-ffgr:
+  ffgr:
     build:
       context: .
       dockerfile: ./app/Dockerfile
     volumes:
-      - /mnt/usb/FFGR/data:/app/data  # Mount local folder to container for data storage
-      - /mnt/usb/FFGR/logs:/app/logs  # Mount local folder to container for log storage
+      - /mnt/usb/ffgr/data:/app/data  # Mount local folder to container for data storage
+      - /mnt/usb/ffgr/logs:/app/logs  # Mount local folder to container for log storage
     environment:
       # Gym-Tracker setup
       - LOCATION_SHORT_TITLE=FFGR
@@ -25,13 +25,13 @@ services:
     command: >
       sh -c "python3 ./test_runner.py && python3 ./main.py"  # Run the command to execute the Python script
 
-  visitor-tracker-ffda:
+  ffda:
     build:
       context: .
       dockerfile: ./app/Dockerfile
     volumes:
-      - /mnt/usb/FFDA/data:/app/data  # Mount local folder to container for data storage
-      - /mnt/usb/FFDA/logs:/app/logs  # Mount local folder to container for log storage
+      - /mnt/usb/ffda/data:/app/data  # Mount local folder to container for data storage
+      - /mnt/usb/ffda/logs:/app/logs  # Mount local folder to container for log storage
     environment:
       # Gym-Tracker setup
       - LOCATION_SHORT_TITLE=FFDA
@@ -39,6 +39,29 @@ services:
       # Database setup
       - DB_HOSTNAME=db
       - DB_NAME=fitness-fabrik-darmstadt
+      - DB_USERNAME=admin
+      - DB_PASSWORD=admin123
+      - DB_PORT=5432
+    depends_on:
+      - db
+    restart: unless-stopped
+    command: >
+      sh -c "python3 ./test_runner.py && python3 ./main.py"  # Run the command to execute the Python script
+
+  ffhb:
+    build:
+      context: .
+      dockerfile: ./app/Dockerfile
+    volumes:
+      - /mnt/usb/ffhb/data:/app/data  # Mount local folder to container for data storage
+      - /mnt/usb/ffhb/logs:/app/logs  # Mount local folder to container for log storage
+    environment:
+      # Gym-Tracker setup
+      - LOCATION_SHORT_TITLE=FFHB
+      
+      # Database setup
+      - DB_HOSTNAME=db
+      - DB_NAME=fitness-fabrik-darmstadt-hbf
       - DB_USERNAME=admin
       - DB_PASSWORD=admin123
       - DB_PORT=5432

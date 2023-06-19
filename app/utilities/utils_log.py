@@ -1,4 +1,3 @@
-"""Utilities related to logging."""
 from datetime import datetime
 
 def log(message: str, file_path: str = None):
@@ -10,7 +9,7 @@ def log(message: str, file_path: str = None):
         message (str): The log message to write.
 
     Note:
-        If file_path is provided, the log file is opened in append mode and the log message is printed to the console.
+        If file_path is provided, the log file is opened in append mode and the log message is written to the file.
         If file_path is None, the log message is printed to the console.
     """
 
@@ -22,6 +21,5 @@ def log(message: str, file_path: str = None):
             file.write(log_message)
             file.write("\n")
 
-       
     print(log_message)
     print("_" * 50)

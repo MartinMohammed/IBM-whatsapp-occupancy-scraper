@@ -1,16 +1,14 @@
-import psycopg2
-import psycopg2.extras
 import unittest
 import os
-from unittest import mock
+from unittest.mock import patch
 from datetime import datetime
 
 from .. import constants
 from .. import utils
 
 
-@mock.patch("utilities.utils_log.log")
-@mock.patch("builtins.print")
+@patch("utilities.utils_log.log")
+@patch("builtins.print")
 class TestUtilities(unittest.TestCase):
     """
     Test cases for generic tools.
@@ -18,26 +16,24 @@ class TestUtilities(unittest.TestCase):
 
     def setUp(self):
         """
-        Run before every test and do some setup work.
+        Set up before every test by performing some initial setup work.
         """
         self.assertion_count = 0  # Initialize assertion count
         self.opening_hours = constants.OPENING_HOURS
 
-        # check if ./data and ./logs folder exists
-        data_dir_path = os.path.join(constants.PATH_TO_ROOT, "data")
-        if not os.path.exists(data_dir_path):
-            os.makedirs(data_dir_path, exist_ok=True)
+        # Check if the './data' and './logs' folders inside the studio short name dir. exist
+        if not os.path.exists(constants.DATA_DIRECTORY):
+            os.makedirs(constants.DATA_DIRECTORY, exist_ok=True)
 
-        logs_dir_path = os.path.join(constants.PATH_TO_ROOT, "logs")
-        if not os.path.exists(logs_dir_path):
-            os.makedirs(logs_dir_path, exist_ok=True)
+        if not os.path.exists(constants.LOG_DIRECTORY):
+            os.makedirs(constants.LOG_DIRECTORY, exist_ok=True)
 
     def test_fetch_data(self, *args):
         """
-        Test case for fetch_data function.
+        Test case for the fetch_data function.
         """
         URL = os.getenv("API_URL")
-        with mock.patch("requests.get") as mock_get:
+        with patch("requests.get") as mock_get:
             mock_get.return_value.json.return_value = {"data": "example data"}
             res_json = utils.fetch_data(URL)
         self.assertEqual(res_json, {"data": "example data"})
@@ -66,34 +62,31 @@ class TestUtilities(unittest.TestCase):
         """Test if the *visitors* file with the given path already exists when the file was created."""
         patched_log = args[1]
         now = datetime.now()
-        now = now.replace(year=1980) # demo year. 
-        
+        now = now.replace(year=1980)  # Demo year.
 
         visitor_file_name = utils.construct_visitor_file_name(now)
         visitor_file_path = os.path.join(constants.DATA_DIRECTORY, visitor_file_name)
-
 
         # 1. Create a test file
         with open(visitor_file_path, "w") as _:
             pass
 
-
         # 2. Verify that the function returns the file_path because the file already exists in the given folder destination.
-        visitor_file_name_test_result = utils.get_today_visitors_file_name_if_it_does_exist(now.year, now.month, now.day)
+        visitor_file_name_test_result = utils.get_today_visitors_file_name_if_it_does_exist(now.year, now.month,
+                                                                                           now.day)
         self.assertEqual(visitor_file_name_test_result, visitor_file_name)
 
-        log_message = f"Found a existing file, continue writing there: {visitor_file_name}."
+        log_message = f"Found an existing file, continue writing there: {visitor_file_name}."
         patched_log.assert_called_with(log_message)
 
         # Remove the created file
         os.remove(visitor_file_path)
 
-
     def test_get_today_visitors_file_name_if_it_does_exist_no_file_created(self, *args):
         """Test if the *visitors* file with the given path already exists when no file was created."""
         patched_log = args[1]
         now = datetime.now()
-        now = now.replace(year=1980) # demo year. 
+        now = now.replace(year=1980)  # Demo year.
 
         day = now.day
         month = now.month
@@ -102,11 +95,12 @@ class TestUtilities(unittest.TestCase):
         visitor_file = utils.get_today_visitors_file_name_if_it_does_exist(year, month, day)
         self.assertEqual(visitor_file, None)
 
-        if (now.day < 10): day = f"0{now.day}"
-        if (now.month < 10): month = f"0{now.month}"
-        log_message = f"Did not found an existing file for day: {day}, month: {month}, {year}, create a new file."
+        if now.day < 10:
+            day = f"0{now.day}"
+        if now.month < 10:
+            month = f"0{now.month}"
+        log_message = f"Did not find an existing file for day: {day}, month: {month}, {year}, create a new file."
         patched_log.assert_called_with(log_message)
-
 
     def test_check_if_in_opening_hours_week_day(self, *args):
         """

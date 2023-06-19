@@ -5,18 +5,8 @@ from . import utils_log
 
 # Constant values such as settings inferred from environment.
 
-# /app inside docker container.
+# Path to the root directory ("/app" inside the Docker container).
 PATH_TO_ROOT = os.getcwd()
-
-# Create the data directory if it doesn't exist.
-DATA_DIRECTORY = os.path.join(PATH_TO_ROOT, "data")
-if not os.path.exists(DATA_DIRECTORY):
-    os.makedirs(DATA_DIRECTORY)
-
-# Create the log directory if it doesn't exist.
-LOG_DIRECTORY = os.path.join(PATH_TO_ROOT, "logs")
-if not os.path.exists(LOG_DIRECTORY):
-    os.makedirs(DATA_DIRECTORY)
 
 
 # ----------------------- SETTINGS -----------------------
@@ -35,11 +25,18 @@ except ValueError:
 
 # Required Environment variables:
 try:
-    assert isinstance(REQUEST_DENSITY, int), "REQUEST_DENSITY must be a valid integer."
-    assert isinstance(ENTRIES_UNTIL_FILE_SEGMENTATION, int), "ENTRIES_UNTIL_FILE_SEGMENTATION must be a valid integer."
-
-    LOCATION_SHORT_TITLE = os.getenv("LOCATION_SHORT_TITLE")  # Indicates the location to be tracked based on the gym-mapping.json file.
+    LOCATION_SHORT_TITLE = os.getenv("LOCATION_SHORT_TITLE").lower()  # Indicates the location to be tracked based on the gym-mapping.json file.
     assert LOCATION_SHORT_TITLE is not None, "LOCATION_SHORT_TITLE was not provided."
+
+    # Create the data directory if it doesn't exist.
+    DATA_DIRECTORY = os.path.join(PATH_TO_ROOT, "data", LOCATION_SHORT_TITLE)
+    if not os.path.exists(DATA_DIRECTORY):
+        os.makedirs(DATA_DIRECTORY)
+
+    # Create the log directory if it doesn't exist.
+    LOG_DIRECTORY = os.path.join(PATH_TO_ROOT, "logs", LOCATION_SHORT_TITLE)
+    if not os.path.exists(LOG_DIRECTORY):
+        os.makedirs(LOG_DIRECTORY)
 
 except AssertionError as e:
     error_file_path = os.path.join(LOG_DIRECTORY, "logs.error")
@@ -51,7 +48,7 @@ except AssertionError as e:
 
 # Studios are identified by their LOCATION SHORT NAME:
 STUDIO_MAP = {
-    "FFDA": {
+    "ffda": {
         "id": "1",
         "title": "Fitness Fabrik Darmstadt",
         "opening_hours": {
@@ -61,7 +58,7 @@ STUDIO_MAP = {
             "week_end": {"open": 10, "close": 21}
         }
     },
-    "FFHB": {
+    "ffhb": {
         "id": "2",
         "title": "Fitness Fabrik Darmstadt (Hbf)",
         "opening_hours": {
@@ -71,7 +68,7 @@ STUDIO_MAP = {
             "week_end": {"open": 0, "close": 24}
         }
     },
-    "FFGR": {
+    "ffgr": {
         "id": "3",
         "title": "Fitness Fabrik Griesheim",
         "opening_hours": {
@@ -83,6 +80,8 @@ STUDIO_MAP = {
     },
 }
 
-OPENING_HOURS = STUDIO_MAP.get(LOCATION_SHORT_TITLE)["opening_hours"]
-LOCATION_ID = OPENING_HOURS.get("id")
-URL = f"https://bodycultureapp.de/ajax/studiocapacity?{LOCATION_ID}"
+STUDIO = STUDIO_MAP.get(LOCATION_SHORT_TITLE)
+OPENING_HOURS = STUDIO["opening_hours"]
+STUDIO_ID = int(STUDIO.get("id"))
+URL = f"https://bodycultureapp.de/ajax/studiocapacity?apiToken=5"
+

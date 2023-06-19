@@ -1,19 +1,26 @@
 import os
-from unittest import (TestCase, mock)
+from unittest import TestCase
+from unittest.mock import patch
 
 from .. import constants
 from .. import utils_log
 
 
-@mock.patch("builtins.print")
+@patch("builtins.print")
 class TestLogUtils(TestCase):
 
-    # --------------------- FOR LOG ---------------------S
+    # --------------------- FOR LOG ---------------------
     def test_log_file_path_provided(self, *args):
-        """Test case for the log function."""
+        """Test case for the log function.
 
-        custom_log_file_path = os.path.join(constants.PATH_TO_ROOT, "logs", "error.log")
+        Test if the log function writes the error message to the specified custom log file path.
+        """
+
+        # Set up
+        custom_log_file_path = os.path.join(constants.LOG_DIRECTORY, "error.log")
         error_message = "Error."
+
+        # Call the log function with custom log file path
         utils_log.log(error_message, custom_log_file_path)
 
         # Check if log writes to file
@@ -24,14 +31,29 @@ class TestLogUtils(TestCase):
             log_contents = log_file.read()
             self.assertIn(error_message, log_contents)
 
-        # Remove the redundant file:
+        # Remove the redundant file
         os.remove(custom_log_file_path)
 
     def test_log_file_path_not_provided(self, *args):
-        """Test case for log function to check if file is created when no file path is provided."""        
-        log_message = "Error."
-        utils_log.log(log_message)
-        self.assertFalse(os.path.exists(os.path.join(constants.PATH_TO_ROOT, "logs", "error.log")))
-        
+        """Test case for log function to check if file is created when no file path is provided.
 
-    # --------------------- FOR LOG --------------------- #
+        Test if the log function creates the error log file when no file path is provided.
+        """
+
+        # Set up
+        log_message = "Error."
+
+        # Call the log function without specifying log file path
+        utils_log.log(log_message)
+
+        # Check if the error log file is not created
+        self.assertFalse(os.path.exists(os.path.join(constants.LOG_DIRECTORY, "error.log")))
+
+    # --------------------- FOR LOG ---------------------
+    #
+    # Additional comments:
+    # - The "FOR LOG" section indicates that the following tests are related to the log function.
+    # - The patch decorator is used to mock the print function for testing purposes.
+    # - Each test case verifies a specific aspect of the log function's behavior.
+    # - Test case 1 checks if the log function writes the error message to the specified custom log file path.
+    # - Test case 2 checks if the log function creates the error log file when no file path is provided.

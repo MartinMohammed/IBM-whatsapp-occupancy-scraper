@@ -50,7 +50,7 @@ The Gym Visitor Tracker is a worker application that monitors gym visitor data b
 
    - `REQUEST_DENSITY`: Specifies the frequency of API requests in seconds. Default: 300 seconds (5 minutes).
    - `ENTRIES_UNTIL_FILE_SEGMENTATION`: Defines the number of entries in the CSV file until a new file is created. Default: 1000 entries.
-   - `LOCATION_ID`: The ID of the gym location (required).
+   - `STUDIO_ID`: The ID of the gym location (required).
    - `LOCATION_SHORT_TITLE`: Indicates the location to be tracked based on the gym-mapping.json file (required).
    - `API_URL`: The URL of the FitnessFabrik API (required).
    - `DB_HOSTNAME`: The hostname of the PostgreSQL database (required).
@@ -97,7 +97,7 @@ The Gym Visitor Tracker application
 
 - `REQUEST_DENSITY`: Specifies the frequency of API requests in seconds. Default: 300 seconds (5 minutes).
 - `ENTRIES_UNTIL_FILE_SEGMENTATION`: Defines the number of entries in the CSV file until a new file is created. Default: 1000 entries.
-- `LOCATION_ID`: The ID of the gym location (required).
+- `STUDIO_ID`: The ID of the gym location (required).
 - `LOCATION_SHORT_TITLE`: Indicates the location to be tracked based on the gym-mapping.json file (required).
 - `API_URL`: The URL of the FitnessFabrik API (required).
 - `DB_HOSTNAME`: The hostname of the PostgreSQL database (required).

@@ -9,10 +9,7 @@ from utilities.tests import test_utils
 from utilities.tests import test_utils_log
 from utilities.tests import test_utils_db
 from utilities.tests import test_utils_csv
-
-
-
-from utilities.management.tests import test_db_connection
+from utilities.management.tests import test_db_connect
 
 if __name__ == '__main__':
     # Create a test suite
@@ -24,7 +21,7 @@ if __name__ == '__main__':
     suite.addTests(unittest.defaultTestLoader.loadTestsFromModule(test_utils_db))
     suite.addTests(unittest.defaultTestLoader.loadTestsFromModule(test_utils_csv))
 
-    suite.addTests(unittest.defaultTestLoader.loadTestsFromModule(test_db_connection))
+    suite.addTests(unittest.defaultTestLoader.loadTestsFromModule(test_db_connect))
 
     # Create a test runner and run the suite
     runner = unittest.TextTestRunner()

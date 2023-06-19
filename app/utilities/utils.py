@@ -21,12 +21,12 @@ def fetch_data(url: str) -> dict:
         response = requests.get(url=url, headers={'Accept': 'application/json'})
         response.raise_for_status()
     except requests.HTTPError as e:
-        utils_log.log(file_path=os.path.join(os.getcwd(), "logs", "requests.log"), message=str(e))
+        utils_log.log(file_path=os.path.join(constants.LOG_DIRECTORY, "requests.log"), message=str(e))
     return response.json()
 
 def check_is_week_day(current_day: int) -> bool:
     """
-    Checks if today is a weekday (Monday including Friday) or not.
+    Check if today is a weekday (Monday to Friday) or not.
 
     Args:
         current_day (int): The current day represented as an integer (0 = Monday, 1 = Tuesday, ...).
@@ -35,14 +35,14 @@ def check_is_week_day(current_day: int) -> bool:
         bool: True if it is a weekday, False otherwise.
     """
     if not (0 <= current_day <= 6):
-        utils_log.log("Warning: Provided weekday is not valid.")
+        utils_log.log("Warning: The provided weekday is not valid.")
         current_day = datetime.now().weekday()
 
     return 0 <= current_day <= 4
 
 def check_if_in_opening_hours(current_time: int, is_week_day: bool) -> bool:
     """
-    Checks if the current time falls within the opening hours of the studio.
+    Check if the current time falls within the opening hours of the studio.
 
     Args:
         current_time (int): The current time represented as an integer (24-hour format).
@@ -58,7 +58,9 @@ def check_if_in_opening_hours(current_time: int, is_week_day: bool) -> bool:
     return studio_open <= current_time < studio_close
 
 def get_today_visitors_file_name_if_it_does_exist(year: int, month: int, day: int):
-    """Checks if the visitors file for the provided month and day exists in the current directory."""
+    """
+    Check if the visitors file for the provided month and day exists in the current directory.
+    """
     # e.g. fixed pattern: 
     # day: index 14 start
     # visitors-FFGR-17-06-2023-20-00.csv
@@ -66,7 +68,7 @@ def get_today_visitors_file_name_if_it_does_exist(year: int, month: int, day: in
     month = f"0{month}" if month < 10 else str(month)
     year = str(year)
 
-    file_names = os.listdir(constants.DATA_DIRECTORY)
+    file_names = os.listdir(os.path.join(constants.DATA_DIRECTORY))
     for file_name in file_names:
         # (16 not included)
         split_file_name = file_name.split("-")
@@ -77,17 +79,16 @@ def get_today_visitors_file_name_if_it_does_exist(year: int, month: int, day: in
 
         utils_log.log(file_name)
         if file_name_day == day and file_name_month == month and file_name_year == year:
-            utils_log.log(f"Found a existing file, continue writing there: {file_name}.")
+            utils_log.log(f"Found an existing file, continue writing there: {file_name}.")
             return file_name
 
     # No match found
-    
-    utils_log.log(f"Did not found an existing file for day: {day}, month: {month}, {year}, create a new file.")
+    utils_log.log(f"Did not find an existing file for day: {day}, month: {month}, {year}, create a new file.")
     return None 
 
 def construct_visitor_file_name(date: datetime) -> str:
     """
-    Constructs a file name for storing visitor data.
+    Construct a file name for storing visitor data.
 
     Args:
         date (datetime): The current date and time.
@@ -102,7 +103,7 @@ def construct_visitor_file_name(date: datetime) -> str:
 
 def calculate_sleep_time_in_seconds(date: datetime, opening_hour: int):
     """
-    Calculates the number of seconds to sleep until the next day's opening time.
+    Calculate the number of seconds to sleep until the next day's opening time.
 
     Args:
         date (datetime): The current date and time.

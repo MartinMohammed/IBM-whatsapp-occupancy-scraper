@@ -1,9 +1,11 @@
-from unittest import (TestCase, mock)
+from unittest import TestCase
+from unittest.mock import patch, MagicMock
 import os
 from .. import utils_db
 
-@mock.patch("utilities.utils_log.log")
-@mock.patch("builtins.print")
+
+@patch("utilities.utils_log.log")
+@patch("builtins.print")
 class TestDBUtils(TestCase):
     """Tests related to DB tools"""
 
@@ -13,7 +15,7 @@ class TestDBUtils(TestCase):
         Test if the create_table_if_not_exists method constructs a correct query to execute.
 
         Args:
-            patched_print: Patched print object.
+            *args: Variable arguments passed to the test method.
 
         Raises:
             AssertionError: If the execute method was not called with the correct arguments or
@@ -21,8 +23,8 @@ class TestDBUtils(TestCase):
 
         """
         # Create mock cursor and connection
-        mock_cursor = mock.MagicMock()
-        mock_connection = mock.MagicMock()
+        mock_cursor = MagicMock()
+        mock_connection = MagicMock()
 
         # Mock the connection.cursor method to return a mocked context manager.
         mock_connection.cursor.return_value.__enter__.return_value = mock_cursor
@@ -44,15 +46,15 @@ class TestDBUtils(TestCase):
         Check if the save_to_db method creates the correct query for the cursor to execute.
 
         Args:
-            patched_print: Patched print object.
+            *args: Variable arguments passed to the test method.
 
         Raises:
             AssertionError: If the execute method was not called with the correct query and values or
                             if the connection commit method was not called.
 
         """
-        mock_cursor = mock.MagicMock()
-        mock_connection = mock.MagicMock()
+        mock_cursor = MagicMock()
+        mock_connection = MagicMock()
 
         # connection.cursor() returns us a context manager.
         mock_connection.cursor.return_value.__enter__.return_value = mock_cursor
@@ -81,11 +83,18 @@ class TestDBUtils(TestCase):
         - Calls the `check_if_database_exists` function.
         - Verifies that the cursor, execute, fetchone, and close methods are called with the expected arguments.
         - Asserts that the database existence is correctly identified as True.
+
+        Args:
+            *args: Variable arguments passed to the test method.
+
+        Raises:
+            AssertionError: If any of the expected method calls or assertions fail.
+
         """
 
         # Create mocked instances for the database connection and cursor
-        mocked_connection = mock.MagicMock()
-        mocked_cursor = mock.MagicMock()
+        mocked_connection = MagicMock()
+        mocked_cursor = MagicMock()
 
         mocked_connection.cursor = mocked_cursor
 
@@ -98,7 +107,7 @@ class TestDBUtils(TestCase):
         does_exist = utils_db.check_if_database_exists(db_connection=mocked_connection, db_name=db_name)
 
         # Set up the expected query
-        expected_query = f"SELECT datname FROM pg_database WHERE datname = '{db_name}';"
+        expected_query = f"SELECT datname FROM pg_database WHERE datname = '{db_name.replace('-', '_')}';"
 
         # Check if the cursor was called to create a cursor
         mocked_cursor.assert_called_once()
@@ -114,8 +123,3 @@ class TestDBUtils(TestCase):
 
         # Assert that the database existence is correctly identified as True
         self.assertTrue(does_exist)
-
-
-
-
-
