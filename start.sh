@@ -59,6 +59,8 @@ run_tests() {
     docker compose build "$service"
     docker compose -f docker-compose.yml run --rm "$service" sh -c "python3 test_runner.py"
   done
+
+  clean_dev_environment  # Delete everything that was deposited by the test code. 
 }
 
 # Check if the 'docker-compose' command exists

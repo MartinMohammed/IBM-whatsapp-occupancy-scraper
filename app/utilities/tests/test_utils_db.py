@@ -122,4 +122,4 @@ class TestDBUtils(TestCase):
         mocked_cursor.return_value.close.assert_called_once()
 
         # Assert that the database existence is correctly identified as True
-        self.assertTrue(does_exist)
+        self.assertTrue(does_exist, msg="Assert database existence correctly identified as True")

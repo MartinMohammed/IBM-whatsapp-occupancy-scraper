@@ -30,18 +30,6 @@ class TestUtilities(unittest.TestCase):
         if not os.path.exists(constants.LOCATION_LOG_DIR):
             os.makedirs(constants.LOCATION_LOG_DIR, exist_ok=True)
 
-    def tearDown(self):
-     # Clean up the created directories from setUp.
-        """
-        To address this issue, you can use shutil.rmtree() instead of os.removedirs() to recursively remove the directories and their contents,
-        regardless of whether they are empty or not. Here's an updated version of the tearDown() method that uses shutil.rmtree():
-         """
-        # if os.path.exists(constants.LOCATION_DATA_DIR):
-        #     shutil.rmtree(constants.LOCATION_DATA_DIR)
-
-        # if os.path.exists(constants.LOCATION_LOG_DIR):
-        #     shutil.rmtree(constants.LOCATION_LOG_DIR)
-
     def test_fetch_data(self, *args):
         """
         Test case for the fetch_data function.
@@ -50,7 +38,7 @@ class TestUtilities(unittest.TestCase):
         with patch("requests.get") as mock_get:
             mock_get.return_value.json.return_value = {"data": "example data"}
             res_json = utils.fetch_data(URL)
-        self.assertEqual(res_json, {"data": "example data"})
+        self.assertEqual(res_json, {"data": "example data"}, msg="Expect that the fetch_data method returns the parsed json data from the body.")
 
     def test_check_is_week_day(self, *args):
         """
@@ -60,9 +48,9 @@ class TestUtilities(unittest.TestCase):
         days = [0, 4, 5, 6]
         results = [True, True, False, False]
         for (day, result) in zip(days, results):
-            self.assertEqual(utils.check_is_week_day(day), result)
+            self.assertEqual(utils.check_is_week_day(day), result, msg="Expect check_is_week_day to return the correct results for the given test array.")
             self.assertion_count += 1
-        self.assertEqual(self.assertion_count, len(days))
+        self.assertEqual(self.assertion_count, len(days), msg=f"Expect that {len(days)} assertions were made.")
 
     def test_construct_visitor_file_name(self, *args):
         """Test case for the construct_visitor_file_name method."""
@@ -70,7 +58,7 @@ class TestUtilities(unittest.TestCase):
         mocked_timestamp = current_time.strftime("%d-%m-%Y-%H-%M")
 
         file_name = utils.construct_visitor_file_name(current_time)
-        self.assertEqual(file_name, f"visitors-{constants.LOCATION_SHORT_TITLE}-{mocked_timestamp}.csv")
+        self.assertEqual(file_name, f"visitors-{constants.LOCATION_SHORT_TITLE}-{mocked_timestamp}.csv", msg="Expect 'construct_visitor_file_name' to construct the correct visitor file name.")
 
     def test_get_today_visitors_file_name_if_it_does_exist_file_created(self, *args):
         """Test if the *visitors* file with the given path already exists when the file was created."""
@@ -91,8 +79,8 @@ class TestUtilities(unittest.TestCase):
             now.month,
             now.day
             )
-        
-        self.assertEqual(visitor_file_name_test_result, visitor_file_name)
+
+        self.assertEqual(visitor_file_name_test_result, visitor_file_name, msg="Expect to get the existing visitors file when it already exists.")
 
         log_message = f"Found an existing file, continue writing there: {visitor_file_name}."
         patched_log.assert_called_with(log_message)
@@ -111,7 +99,7 @@ class TestUtilities(unittest.TestCase):
         year = now.year
 
         visitor_file = utils.get_today_visitors_file_name_if_it_does_exist(year, month, day)
-        self.assertEqual(visitor_file, None)
+        self.assertEqual(visitor_file, None, msg="Expect there is no visitor_file return value when it has not been created yet.")
 
         if now.day < 10:
             day = f"0{now.day}"
@@ -132,10 +120,10 @@ class TestUtilities(unittest.TestCase):
 
         for (hour, result) in zip(hours, results):
             res = utils.check_if_in_opening_hours(hour, is_week_day=is_week_day)
-            self.assertEqual(res, result)
+            self.assertEqual(res, result, msg="Expect that 'check_if_in_opening_hours' returns the correct values if we're in the opening hours on a weekday.")
             self.assertion_count += 1
 
-        self.assertEqual(self.assertion_count, len(hours))
+        self.assertEqual(self.assertion_count, len(hours), msg=f"Expect {len(hours)} assertions made.")
 
     def test_check_if_in_opening_hours_week_end(self, *args):
         """Test case for checking if the current hour is within the opening hours of the Griesheim gym on weekends."""
@@ -147,10 +135,10 @@ class TestUtilities(unittest.TestCase):
 
         for (hour, result) in zip(hours, results):
             res = utils.check_if_in_opening_hours(hour, is_week_day=is_week_day)
-            self.assertEqual(res, result)
+            self.assertEqual(res, result, msg="Expect that 'check_if_in_opening_hours' returns the correct values if we're in the opening hours on a weekend.")
             self.assertion_count += 1
 
-        self.assertEqual(self.assertion_count, len(hours))
+        self.assertEqual(self.assertion_count, len(hours), msg=f"Expect {len(hours)} assertions made.")
 
     def test_calculate_sleep_time_in_seconds_for_tomorrow(self, *args):
         """
@@ -160,18 +148,17 @@ class TestUtilities(unittest.TestCase):
         current_time = datetime(year=2023, month=6, day=15, hour=23, minute=34, second=35)
         amount_of_seconds = utils.calculate_sleep_time_in_seconds(current_time, 8)
 
-        self.assertEqual(amount_of_seconds, 30325)
+        self.assertEqual(amount_of_seconds, 30325, msg="Expect that 'calculate_sleep_time_in_seconds' returns the correct amount of seconds until the opening time tomorrow.")
 
-    def test_calculate_sleep_time_in_seconds_for_today(self, *args): 
-       # today 
+    def test_calculate_sleep_time_in_seconds_for_today(self, *args):
+        # today
         current_time = datetime(year=2023, month=6, day=16, hour=3, minute=40, second=55)
         amount_of_seconds = utils.calculate_sleep_time_in_seconds(current_time, 8)
 
-        self.assertEqual(amount_of_seconds, 15545)
+        self.assertEqual(amount_of_seconds, 15545, msg="Expect that 'calculate_sleep_time_in_seconds' returns the correct amount of seconds until the opening time today.")
 
-        # 5:29 AM and 20 seconds 
+        # 5:29 AM and 20 seconds
         current_time = datetime(year=2023, month=6, day=16, hour=5, minute=29, second=20)
 
         amount_of_seconds = utils.calculate_sleep_time_in_seconds(current_time, 8)
-        self.assertEqual(amount_of_seconds, 9040)
-
+        self.assertEqual(amount_of_seconds, 9040, msg="Expect that 'calculate_sleep_time_in_seconds' returns the correct amount of seconds until the opening time today.")

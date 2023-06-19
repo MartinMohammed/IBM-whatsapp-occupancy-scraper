@@ -31,9 +31,8 @@ class TestCSVUtils(TestCase):
             data = [row for row in csv_reader]
 
             # Check if the file exists and has the expected data
-            self.assertTrue(os.path.exists(custom_file_path))
-            self.assertEqual(data[0], header)
-            self.assertEqual(int(data[1][1]), 50)
+            self.assertTrue(os.path.exists(custom_file_path), msg="The file should exist.")
+            self.assertEqual(data[0], header, msg="The header should match.")
+            self.assertEqual(int(data[1][1]), 50, msg="The visitor count should be 50.")
 
         os.remove(custom_file_path)
-
