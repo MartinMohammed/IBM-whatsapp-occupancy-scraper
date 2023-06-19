@@ -3,10 +3,12 @@
 # Create directories for individual studios and services defined in Docker Compose
 create_directories() {
   local directories=(
-    "$PWD/app/data/ffgr" "$PWD/app/data/ffgr/logs" "$PWD/grafana_data"
-    "$PWD/app/data/ffda" "$PWD/app/data/ffda/logs" "$PWD/grafana_data"
-    "$PWD/app/data/ffhb" "$PWD/app/data/ffhb/logs" "$PWD/grafana_data"
+    "$PWD/app/data/ffgr" "$PWD/app/data/ffgr/logs"
+    "$PWD/app/data/ffda" "$PWD/app/data/ffda/logs"
+    "$PWD/app/data/ffhb" "$PWD/app/data/ffhb/logs"
+    "$PWD/grafana_data"
   )
+
 
   for dir in "${directories[@]}"; do
     mkdir -p "$dir"
@@ -64,19 +66,21 @@ run_tests() {
   done
 }
 
-
 # Check if the 'docker-compose' command exists
 if command -v docker-compose >/dev/null 2>&1 || command -v docker compose >/dev/null; then
   case $1 in
     "--dev")
       case $2 in
-        "--clean") clean_dev_environment ;;
         "--raspi") start_raspi_services ;;
         *) start_dev_services ;;
       esac
       ;;
-    "--test") run_tests ;;
-    *) start_production_services ;;
+    "--clean")
+      clean_dev_environment ;;
+    "--test")
+      run_tests ;;
+    *)
+      start_production_services ;;
   esac
 else
   echo "The command 'docker-compose' does not exist."
