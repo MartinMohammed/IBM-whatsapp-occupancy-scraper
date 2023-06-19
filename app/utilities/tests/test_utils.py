@@ -1,7 +1,9 @@
 import unittest
 import os
+import shutil
 from unittest.mock import patch
 from datetime import datetime
+import time
 
 from .. import constants
 from .. import utils
@@ -22,11 +24,23 @@ class TestUtilities(unittest.TestCase):
         self.opening_hours = constants.OPENING_HOURS
 
         # Check if the './data' and './logs' folders inside the studio short name dir. exist
-        if not os.path.exists(constants.DATA_DIRECTORY):
-            os.makedirs(constants.DATA_DIRECTORY, exist_ok=True)
+        if not os.path.exists(constants.LOCATION_DATA_DIR):
+            os.makedirs(constants.LOCATION_DATA_DIR, exist_ok=True)
 
-        if not os.path.exists(constants.LOG_DIRECTORY):
-            os.makedirs(constants.LOG_DIRECTORY, exist_ok=True)
+        if not os.path.exists(constants.LOCATION_LOG_DIR):
+            os.makedirs(constants.LOCATION_LOG_DIR, exist_ok=True)
+
+    def tearDown(self):
+     # Clean up the created directories from setUp.
+        """
+        To address this issue, you can use shutil.rmtree() instead of os.removedirs() to recursively remove the directories and their contents,
+        regardless of whether they are empty or not. Here's an updated version of the tearDown() method that uses shutil.rmtree():
+         """
+        # if os.path.exists(constants.LOCATION_DATA_DIR):
+        #     shutil.rmtree(constants.LOCATION_DATA_DIR)
+
+        # if os.path.exists(constants.LOCATION_LOG_DIR):
+        #     shutil.rmtree(constants.LOCATION_LOG_DIR)
 
     def test_fetch_data(self, *args):
         """
@@ -65,15 +79,19 @@ class TestUtilities(unittest.TestCase):
         now = now.replace(year=1980)  # Demo year.
 
         visitor_file_name = utils.construct_visitor_file_name(now)
-        visitor_file_path = os.path.join(constants.DATA_DIRECTORY, visitor_file_name)
+        visitor_file_path = os.path.join(constants.LOCATION_DATA_DIR, visitor_file_name)
 
         # 1. Create a test file
         with open(visitor_file_path, "w") as _:
             pass
 
         # 2. Verify that the function returns the file_path because the file already exists in the given folder destination.
-        visitor_file_name_test_result = utils.get_today_visitors_file_name_if_it_does_exist(now.year, now.month,
-                                                                                           now.day)
+        visitor_file_name_test_result = utils.get_today_visitors_file_name_if_it_does_exist(
+            now.year,
+            now.month,
+            now.day
+            )
+        
         self.assertEqual(visitor_file_name_test_result, visitor_file_name)
 
         log_message = f"Found an existing file, continue writing there: {visitor_file_name}."

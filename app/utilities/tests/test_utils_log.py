@@ -17,7 +17,7 @@ class TestLogUtils(TestCase):
         """
 
         # Set up
-        custom_log_file_path = os.path.join(constants.LOG_DIRECTORY, "error.log")
+        custom_log_file_path = os.path.join(constants.LOCATION_LOG_DIR, "error.log")
         error_message = "Error."
 
         # Call the log function with custom log file path
@@ -47,7 +47,7 @@ class TestLogUtils(TestCase):
         utils_log.log(log_message)
 
         # Check if the error log file is not created
-        self.assertFalse(os.path.exists(os.path.join(constants.LOG_DIRECTORY, "error.log")))
+        self.assertFalse(os.path.exists(os.path.join(constants.LOCATION_LOG_DIR, "error.log")))
 
     # --------------------- FOR LOG ---------------------
     #

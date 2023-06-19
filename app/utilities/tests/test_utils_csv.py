@@ -19,7 +19,7 @@ class TestCSVUtils(TestCase):
         """
         Test case for write_to_csv function.
         """
-        custom_file_path = os.path.join(constants.DATA_DIRECTORY, "test.csv")
+        custom_file_path = os.path.join(constants.LOCATION_DATA_DIR, "test.csv")
         header = ["timestamp", "visitor_count"]
         timestamp = int(datetime.timestamp(datetime.now()))
 

@@ -21,7 +21,7 @@ def fetch_data(url: str) -> dict:
         response = requests.get(url=url, headers={'Accept': 'application/json'})
         response.raise_for_status()
     except requests.HTTPError as e:
-        utils_log.log(file_path=os.path.join(constants.LOG_DIRECTORY, "requests.log"), message=str(e))
+        utils_log.log(file_path=os.path.join(constants.LOCATION_LOG_DIR, "requests.log"), message=str(e))
     return response.json()
 
 def check_is_week_day(current_day: int) -> bool:
@@ -68,7 +68,7 @@ def get_today_visitors_file_name_if_it_does_exist(year: int, month: int, day: in
     month = f"0{month}" if month < 10 else str(month)
     year = str(year)
 
-    file_names = os.listdir(os.path.join(constants.DATA_DIRECTORY))
+    file_names = os.listdir(constants.LOCATION_DATA_DIR)
     for file_name in file_names:
         # (16 not included)
         split_file_name = file_name.split("-")

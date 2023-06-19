@@ -51,7 +51,7 @@ try:
     assert DB_PORT, "DB_PORT environment variable is not set."
 
 except AssertionError as e:
-    error_file_path = os.path.join(constants.LOG_DIRECTORY, "logs.error")
+    error_file_path = os.path.join(constants.LOCATION_LOG_DIR, "logs.error")
     utils_log.log(f"Location Short Title: {constants.LOCATION_SHORT_TITLE} --> {e}", error_file_path)
     sys.exit(1)
 
@@ -126,7 +126,7 @@ def main():
             if visitor_file_name_if_exists is None:
                 visitor_file_name_if_exists = file_name
 
-            file_path = os.path.join(constants.DATA_DIRECTORY, visitor_file_name_if_exists)
+            file_path = os.path.join(constants.LOCATION_DATA_DIR, visitor_file_name_if_exists)
 
             timestamp = int(datetime.timestamp(now))
             current_load = studio_location_data.get("current_load")

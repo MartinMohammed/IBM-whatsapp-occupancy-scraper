@@ -26,7 +26,7 @@ def create_table_if_not_exists(connection, table_name, fields):
     with connection.cursor() as cursor:
         query = f'''CREATE TABLE IF NOT EXISTS {table_name}{fields}'''
         cursor.execute(query)
-        utils_log.log("Creating a new table if it doesn't exist.", os.path.join(constants.LOG_DIRECTORY, "db.log"))
+        utils_log.log("Creating a new table if it doesn't exist.", os.path.join(constants.LOCATION_LOG_DIR, "db.log"))
         connection.commit()
 
 def save_to_db(connection, table_name, fields, values):
@@ -49,7 +49,7 @@ def save_to_db(connection, table_name, fields, values):
         query = f"INSERT INTO {table_name} {fields} VALUES(%s, %s)"
         cursor.execute(query, values)
         connection.commit()
-        utils_log.log(f"Successfully saved data into {table_name} with fields: '${fields}'.", os.path.join(constants.LOG_DIRECTORY, "db.log"))
+        utils_log.log(f"Successfully saved data into {table_name} with fields: '${fields}'.", os.path.join(constants.LOCATION_LOG_DIR, "db.log"))
 
 def check_if_database_exists(db_connection, db_name: str) -> bool:
     """

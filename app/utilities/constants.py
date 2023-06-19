@@ -29,17 +29,17 @@ try:
     assert LOCATION_SHORT_TITLE is not None, "LOCATION_SHORT_TITLE was not provided."
 
     # Create the data directory if it doesn't exist.
-    DATA_DIRECTORY = os.path.join(PATH_TO_ROOT, "data", LOCATION_SHORT_TITLE)
-    if not os.path.exists(DATA_DIRECTORY):
-        os.makedirs(DATA_DIRECTORY)
+    LOCATION_DATA_DIR = os.path.join(PATH_TO_ROOT, LOCATION_SHORT_TITLE, "data",)
+    if not os.path.exists(LOCATION_DATA_DIR):
+        os.makedirs(LOCATION_DATA_DIR, exist_ok=True)
 
     # Create the log directory if it doesn't exist.
-    LOG_DIRECTORY = os.path.join(PATH_TO_ROOT, "logs", LOCATION_SHORT_TITLE)
-    if not os.path.exists(LOG_DIRECTORY):
-        os.makedirs(LOG_DIRECTORY)
+    LOCATION_LOG_DIR = os.path.join(PATH_TO_ROOT, LOCATION_SHORT_TITLE, "logs")
+    if not os.path.exists(LOCATION_LOG_DIR):
+        os.makedirs(LOCATION_LOG_DIR, exist_ok=True)
 
 except AssertionError as e:
-    error_file_path = os.path.join(LOG_DIRECTORY, "logs.error")
+    error_file_path = os.path.join(LOCATION_LOG_DIR, "logs.error")
     utils_log.log(f"Location Short Title: {LOCATION_SHORT_TITLE} --> {e}", error_file_path)
     sys.exit(1)
 
@@ -84,4 +84,3 @@ STUDIO = STUDIO_MAP.get(LOCATION_SHORT_TITLE)
 OPENING_HOURS = STUDIO["opening_hours"]
 STUDIO_ID = int(STUDIO.get("id"))
 URL = f"https://bodycultureapp.de/ajax/studiocapacity?apiToken=5"
-

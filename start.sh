@@ -3,18 +3,17 @@
 # Create directories for individual studios and services defined in Docker Compose
 create_directories() {
   local directories=(
-    "$PWD/app/data/ffgr" "$PWD/app/data/ffgr/logs"
-    "$PWD/app/data/ffda" "$PWD/app/data/ffda/logs"
-    "$PWD/app/data/ffhb" "$PWD/app/data/ffhb/logs"
-    "$PWD/grafana_data"
+    "$PWD/app/data/ffgr/data" "$PWD/app/logs/ffgr/logs"
+    "$PWD/app/data/ffda/data" "$PWD/app/logs/ffda/logs"
+    "$PWD/app/data/ffhb/data" "$PWD/app/logs/ffhb/logs"
+    "$PWD/grafana_data"  "$PWD/postgres"
   )
-
-
+  # Create every directory in the list inside the container.
   for dir in "${directories[@]}"; do
     mkdir -p "$dir"
   done
 
-  chmod o+w "$PWD/grafana_data"
+  chmod o+w "$PWD/grafana_data" "$PWD/postgres"
 }
 
 # Clean up and remove volumes for development environment
@@ -57,10 +56,6 @@ run_tests() {
   local services=("ffgr" "ffda" "ffhb")
 
   for service in "${services[@]}"; do
-    local data_dir="$PWD/app/data/$service"
-    local logs_dir="$PWD/app/logs/$service"
-
-    rm -rf "$data_dir" "$logs_dir"
     docker compose build "$service"
     docker compose -f docker-compose.yml run --rm "$service" sh -c "python3 test_runner.py"
   done

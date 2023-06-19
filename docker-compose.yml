@@ -5,8 +5,8 @@ services:
       context: .
       dockerfile: ./app/Dockerfile
     volumes:
-      - ./app/data/ffgr/:/app/data  # Mount local folder to container for data storage
-      - ./app/logs/ffgr:/app/logs  # Mount local folder to container for log storage
+      - ./app/data/ffgr/data:/app/ffgr/data  # Mount local folder to container for data storage
+      - ./app/logs/ffgr/logs:/app/ffgr/logs  # Mount local folder to container for log storage
     environment:
       # Gym-Tracker setup
       - LOCATION_SHORT_TITLE=FFGR
@@ -29,8 +29,8 @@ services:
       context: .
       dockerfile: ./app/Dockerfile
     volumes:
-      - ./app/data/ffda:/app/data  # Mount local folder to container for data storage
-      - ./app/logs/ffda:/app/logs  # Mount local folder to container for log storage
+      - ./app/data/ffda/data:/app/ffda/data  # Mount local folder to container for data storage
+      - ./app/logs/ffda/logs:/app/ffda/logs  # Mount local folder to container for log storage
     environment:
        # Gym-Tracker setup
       - LOCATION_SHORT_TITLE=FFDA
@@ -52,8 +52,8 @@ services:
       context: .
       dockerfile: ./app/Dockerfile
     volumes:
-      - ./app/data/ffhb:/app/data  # Mount local folder to container for data storage
-      - ./app/logs/ffhb:/app/logs  # Mount local folder to container for log storage
+      - ./app/data/ffhb/data:/app/ffhb/data  # Mount local folder to container for data storage
+      - ./app/logs/ffhb/logs:/app/ffhb/logs  # Mount local folder to container for log storage
     environment:
       # Gym-Tracker setup
       - LOCATION_SHORT_TITLE=FFHB
@@ -69,7 +69,7 @@ services:
     restart: unless-stopped
     command: >
       sh -c "python3 ./test_runner.py && python3 ./main.py"  # Run the command to execute the Python script
-
+    
   db:
     image: postgres:15.3-alpine3.17
     restart: unless-stopped

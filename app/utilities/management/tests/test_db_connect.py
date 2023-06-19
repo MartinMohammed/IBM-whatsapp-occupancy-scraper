@@ -22,7 +22,7 @@ class TestDB(TestCase):
         self.db_password = os.getenv("DB_PASSWORD")
         self.db_port = os.getenv("DB_PORT")
 
-        self.file_path = os.path.join(constants.LOG_DIRECTORY, "db.log")
+        self.file_path = os.path.join(constants.LOCATION_LOG_DIR, "db.log")
 
     @patch("time.sleep")
     def test_db_connect_if_db_exists(self, *args):
