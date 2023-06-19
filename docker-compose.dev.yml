@@ -5,8 +5,8 @@ services:
       context: .
       dockerfile: ./app/Dockerfile
     volumes:
-      - ./app/data:/app/data  # Mount local folder to container for data storage
-      - ./app/logs:/app/logs  # Mount local folder to container for log storage
+      - ./app/data/ffgr:/app/data  # Mount local folder to container for data storage
+      - ./app/logs/ffgr:/app/logs  # Mount local folder to container for log storage
     environment:
       # Gym-Tracker setup
       - LOCATION_SHORT_TITLE=FFGR
@@ -29,8 +29,8 @@ services:
       context: .
       dockerfile: ./app/Dockerfile
     volumes:
-      - ./app/data:/app/data  # Mount local folder to container for data storage
-      - ./app/logs:/app/logs  # Mount local folder to container for log storage
+      - ./app/data/ffda:/app/data  # Mount local folder to container for data storage
+      - ./app/logs/ffda:/app/logs  # Mount local folder to container for log storage
     environment:
        # Gym-Tracker setup
       - LOCATION_SHORT_TITLE=FFDA
@@ -52,8 +52,8 @@ services:
       context: .
       dockerfile: ./app/Dockerfile
     volumes:
-      - ./app/data:/app/data  # Mount local folder to container for data storage
-      - ./app/logs:/app/logs  # Mount local folder to container for log storage
+      - ./app/data/ffhb:/app/data  # Mount local folder to container for data storage
+      - ./app/logs/ffhb:/app/logs  # Mount local folder to container for log storage
     environment:
       # Gym-Tracker setup
       - LOCATION_SHORT_TITLE=FFHB

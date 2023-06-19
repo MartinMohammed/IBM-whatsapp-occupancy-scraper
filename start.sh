@@ -28,9 +28,6 @@ clean_dev_environment() {
   for dir in "${directories[@]}"; do
     rm -rf "$dir"
   done
-
-  # Start again
-  docker compose -f docker-compose.dev.yml up --build
 }
 
 # Start the services defined in the development Docker Compose file
