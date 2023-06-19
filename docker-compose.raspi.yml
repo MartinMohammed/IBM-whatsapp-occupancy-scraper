@@ -38,7 +38,7 @@ services:
 
       # Database setup
       - DB_HOSTNAME=db
-      - DB_NAME=fitness-fabrik-darmstadt
+      - DB_NAME=fitness_fabrik_darmstadt
       - DB_USERNAME=admin
       - DB_PASSWORD=admin123
       - DB_PORT=5432
