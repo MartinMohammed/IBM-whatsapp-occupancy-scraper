@@ -1,5 +1,5 @@
 # Use the official Python 3.9.17-alpine3.18 base image
-FROM python:3.12-rc-slim-bookworm
+FROM python:3.9.17-alpine3.18
 LABEL maintainer="martin.mohammed.info"
 
 # We are setting an environment variable `PYTHONUNBUFFERED` to ensure that the output 
