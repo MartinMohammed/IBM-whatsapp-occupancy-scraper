@@ -6,7 +6,6 @@ LABEL maintainer="martin.mohammed.info"
 # from Python is not buffered and is directly printed to the console without any delay.
 # This is recommended when working with Python 3 inside a Docker container.
 ENV PYTHONUNBUFFERED 1
-COPY ./app /app
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -32,8 +31,11 @@ RUN python3 -m venv /py && \
     # Remove the build dependencies to keep the image size smaller
     apk del .tmp-build-deps
 
+
 ENV PATH="/py/bin:$PATH"    
 
 # SET THE CORRECT TIMEZONE 
 ENV TZ="Europe/Berlin"
 
+# Improve image layer caching by moving the changing thing at the end of the file
+COPY ./app /app
