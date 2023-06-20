@@ -16,7 +16,15 @@ portainer_data
 
 # Git
 .git
+.github
 .gitignore
+
+# miscellaneous 
+start.sh
+README.md
+.vscode
+
+
 
 # CI
 .codeclimate.yml
