@@ -41,5 +41,11 @@
           # executes the specified command, and then removes the container once the command completes.
           # Since the container is not intended to be long-running, the restart policy defined in
           # the Docker Compose file does not apply in this case.
-          run: bash ./start.sh --test
+
+          run: 
+            # sh -c command in Docker, it starts a shell (in this case, the "sh" shell) inside the container that GitHub has created.
+            # Test all locations
+            sh -c "docker-compose run --rm ffgr sh -c 'python3 test_runner.py' &&
+             docker-compose run --rm ffda sh -c 'python3 test_runner.py' &&
+             docker-compose run --rm ffhb sh -c 'python3 test_runner.py'"
   
