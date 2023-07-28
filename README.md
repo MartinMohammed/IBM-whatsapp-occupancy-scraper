@@ -39,14 +39,8 @@ The Authorization Server with JWT is a secure authentication service that allows
 
 [Link to Authorization Server Repository](https://github.com/MartinMohammed/IBM-jwt-authorization)
 
-# WhatsApp Middleware NPM Package
 
-The WhatsApp Middleware Package is a highly successful npm package developed during my internship at IBM. It serves as a crucial component of the Fitness App Suite, enabling seamless integration with the WhatsApp Chatbot and real-time message communication.
-
-[Link to WhatsApp Middleware NPM package](https://github.com/MartinMohammed/IBM-whatsapp-bot-middleware-npm)
-
-
-# Gym Occupancy scraper / notifier
+# Gym Occupancy Tracker
 
 ## Overview
 
@@ -192,6 +186,12 @@ Contributions to the Gym Visitor Tracker project are welcome! If you find any is
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
+
+## WhatsApp Middleware NPM Package
+
+The WhatsApp Middleware Package is a highly successful npm package developed during my internship at IBM. It serves as a crucial component of the Fitness App Suite, enabling seamless integration with the WhatsApp Chatbot and real-time message communication.
+
+[Link to WhatsApp Middleware NPM package](https://github.com/MartinMohammed/IBM-whatsapp-bot-middleware-npm)
 
 
 ## Conclusion
