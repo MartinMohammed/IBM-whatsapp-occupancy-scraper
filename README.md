@@ -14,15 +14,39 @@ The success of the WhatsApp Chatbot was impressive, as it garnered widespread in
 
 ### Quick navigation 
 
-
-- [Gym Occupancy Tracker Repository](https://github.com/MartinMohammed/IBM-whatsapp-occupancy-scraper)
 - [Svelte Frontend Dashboard Repository](https://github.com/MartinMohammed/IBM-whatsapp-bot-frontend)
 - [WhatsApp Backend Server Repository](https://github.com/MartinMohammed/IBM-whatsapp-bot-backend)
 - [Authorization Server Repository](https://github.com/MartinMohammed/IBM-jwt-authorization)
 - [WhatsApp Middleware NPM Package](https://github.com/MartinMohammed/IBM-whatsapp-bot-middleware-npm)
 
 
-# Gym Visitor Tracker
+## Svelte Frontend Dashboard
+
+The Svelte Frontend Dashboard is a web application designed for the CRS team to interact with gym members and facilitate automated WhatsApp customer service. Built with Svelte, it utilizes websockets to fetch real-time data from the backend, including recent WhatsApp messages. The production version includes a permission system, enabling admin privileges and integration with Google's Dialogflow chatbot AI.
+
+![Login Screen](https://github.com/MartinMohammed/whataspp-dashboard-svelte/assets/81469658/9cc033d6-48c3-4efd-bd2d-b81fce6df6c3.png)
+
+![Chat Screen](https://github.com/MartinMohammed/whataspp-dashboard-svelte/assets/81469658/377f62d9-581f-4230-b6c0-e3f20f5a4c23.png)
+## WhatsApp Backend Server
+
+The WhatsApp Backend server is responsible for delivering new incoming messages to the WhatsApp dashboard and thus to the customer service in real time using web sockets and sending messages to gym members via the WhatsApp Cloud API. It provides a protected REST API and as well a web socket server. It stores all messages that were sent in a NoSQL database on AWS.
+
+[Link to WhatsApp Backend Server Repository](https://github.com/MartinMohammed/IBM-whatsapp-bot-backend)
+
+## Authorization Server with JWT
+
+The Authorization Server with JWT is a secure authentication service that allows users to register, login, and manage their authentication tokens. It provides endpoints for user registration, user login, refreshing access tokens, and logging out. The API uses JWTs for authentication and Redis for managing refresh tokens.
+
+[Link to Authorization Server Repository](https://github.com/MartinMohammed/IBM-jwt-authorization)
+
+# WhatsApp Middleware NPM Package
+
+The WhatsApp Middleware Package is a highly successful npm package developed during my internship at IBM. It serves as a crucial component of the Fitness App Suite, enabling seamless integration with the WhatsApp Chatbot and real-time message communication.
+
+[Link to WhatsApp Middleware NPM package](https://github.com/MartinMohammed/IBM-whatsapp-bot-middleware-npm)
+
+
+# Gym Occupancy scraper / notifier
 
 ## Overview
 
@@ -169,31 +193,6 @@ Contributions to the Gym Visitor Tracker project are welcome! If you find any is
 
 This project is licensed under the [MIT License](LICENSE).
 
-
-## Svelte Frontend Dashboard
-
-The Svelte Frontend Dashboard is a web application designed for the CRS team to interact with gym members and facilitate automated WhatsApp customer service. Built with Svelte, it utilizes websockets to fetch real-time data from the backend, including recent WhatsApp messages. The production version includes a permission system, enabling admin privileges and integration with Google's Dialogflow chatbot AI.
-
-![Login Screen](https://github.com/MartinMohammed/whataspp-dashboard-svelte/assets/81469658/9cc033d6-48c3-4efd-bd2d-b81fce6df6c3.png)
-
-![Chat Screen](https://github.com/MartinMohammed/whataspp-dashboard-svelte/assets/81469658/377f62d9-581f-4230-b6c0-e3f20f5a4c23.png)
-## WhatsApp Backend Server
-
-The WhatsApp Backend server is responsible for delivering new incoming messages to the WhatsApp dashboard and thus to the customer service in real time using web sockets and sending messages to gym members via the WhatsApp Cloud API. It provides a protected REST API and as well a web socket server. It stores all messages that were sent in a NoSQL database on AWS.
-
-[Link to WhatsApp Backend Server Repository](https://github.com/MartinMohammed/IBM-whatsapp-bot-backend)
-
-## Authorization Server with JWT
-
-The Authorization Server with JWT is a secure authentication service that allows users to register, login, and manage their authentication tokens. It provides endpoints for user registration, user login, refreshing access tokens, and logging out. The API uses JWTs for authentication and Redis for managing refresh tokens.
-
-[Link to Authorization Server Repository](https://github.com/MartinMohammed/IBM-jwt-authorization)
-
-# WhatsApp Middleware NPM Package
-
-The WhatsApp Middleware Package is a highly successful npm package developed during my internship at IBM. It serves as a crucial component of the Fitness App Suite, enabling seamless integration with the WhatsApp Chatbot and real-time message communication.
-
-[Link to WhatsApp Middleware NPM package](https://github.com/MartinMohammed/IBM-whatsapp-bot-middleware-npm)
 
 ## Conclusion
 
